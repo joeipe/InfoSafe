@@ -1,0 +1,36 @@
+{
+  "id": 0,
+  "firstName": "Joe",
+  "lastName": "Ipe",
+  "doB": "1981-04-26 00:00:00.000",
+  "address": {
+    "id": 0,
+    "contactId": 0,
+    "address1": "44 Bank St",
+    "address2": null,
+    "address3": null,
+    "city": "Lara",
+    "state": "VIC",
+    "country": "AU",
+    "postalCode": "3212"
+  },
+  "emailAddresses": [
+    {
+      "id": 0,
+      "contactId": 0,
+      "email": "joe.ipe@hotmail.com"
+    },
+    {
+      "id": 0,
+      "contactId": 0,
+      "email": "joervn@gmail.com"
+    }
+  ],
+  "phoneNumber": {
+    "id": 0,
+    "contactId": 0,
+    "mobile": "0469759250",
+    "business": null,
+    "work": null
+  }
+}
