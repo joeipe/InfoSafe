@@ -44,15 +44,3 @@ stages:
         ArtifactName: 'drop'
         publishLocation: 'Container'
 
-- stage: deploy_to_prod
-  condition: and(always(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-  jobs:
-    - job: waitForApproval
-      steps:
-      - task: ManualValidation@0
-        displayName: 'Wait for Approval'
-        timeoutInMinutes: 1440
-        inputs:
-          notifyUsers: 'joe.ipe@hotmail.com'
-          instructions: 'Please validate the uat end deployment'
-          onTimeout: reject
