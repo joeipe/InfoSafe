@@ -38,30 +38,30 @@ stages:
     #    platform: '$(buildPlatform)'
     #    configuration: '$(buildConfiguration)'
 
-    - task: PublishBuildArtifacts@1
-      inputs:
-        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-        ArtifactName: 'drop'
-        #publishLocation: 'Container'
+    #- task: PublishBuildArtifacts@1
+    #  inputs:
+    #    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    #    ArtifactName: 'drop'
+    #    publishLocation: 'Container'
 
-- stage: deploy_to_prod
-  condition: and(always(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-  jobs:
-    - job: deployToAppService
-      displayName: 'DeployToAppService - Prod'
-      steps:
+#- stage: deploy_to_prod
+#  condition: and(always(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+#  jobs:
+#    - job: deployToAppService
+#      displayName: 'DeployToAppService - Prod'
+#      steps:
       
-      - task: DownloadPipelineArtifact@2
-        inputs:
-          buildType: 'current'
-          artifactName: 'drop'
-          targetPath: '$(Pipeline.Workspace)'
+#      - task: DownloadPipelineArtifact@2
+#        inputs:
+#          buildType: 'current'
+#          artifactName: 'drop'
+#          targetPath: '$(Pipeline.Workspace)'
 
-      - task: AzureWebApp@1
-        inputs:
-          azureSubscription: 'AzureSC'
-          appType: 'webApp'
-          appName: 'InfoSafeApi'
-          package: '$(Pipeline.Workspace)/**/*.zip'
-          appSettings: '-ASPNETCORE_ENVIRONMENT "Production"'
-          deploymentMethod: 'auto'
+#      - task: AzureWebApp@1
+#        inputs:
+#          azureSubscription: 'AzureSC'
+#          appType: 'webApp'
+#          appName: 'InfoSafeApi'
+#          package: '$(Pipeline.Workspace)/**/*.zip'
+#          appSettings: '-ASPNETCORE_ENVIRONMENT "Production"'
+#          deploymentMethod: 'auto'
