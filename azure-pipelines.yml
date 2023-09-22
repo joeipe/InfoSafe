@@ -28,10 +28,9 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-- task: Docker@2
+- task: DockerInstaller@0
   inputs:
-    containerRegistry: 'dockerhub'
-    command: 'start'
+    dockerVersion: '17.09.0-ce'
 
 - task: VSTest@2
   inputs:
