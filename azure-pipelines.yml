@@ -50,14 +50,23 @@ stages:
     - job: deployToAppService
       displayName: 'DeployToAppService - Prod'
       steps:
+      
+      - task: DownloadPipelineArtifact@2
+        inputs:
+          buildType: 'current'
+          artifactName: 'drop'
+          targetPath: '$(Pipeline.Workspace)'
 
       - task: AzureWebApp@1
         inputs:
           azureSubscription: 'AzureSC'
           appType: 'webApp'
           appName: 'InfoSafeApi'
-          package: '$(Build.ArtifactStagingDirectory)/**/*.zip'
+          package: '$(Pipeline.Workspace)/**/*.zip'
+          appSettings: '-ASPNETCORE_ENVIRONMENT "Production"'
           deploymentMethod: 'auto'
+      
+
       
       
       
