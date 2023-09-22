@@ -40,9 +40,6 @@
     <None Update="IntegrationTestsData\contact_seed.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="IntegrationTestsData\contact_get.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
 </Project>
