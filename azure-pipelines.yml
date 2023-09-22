@@ -49,3 +49,5 @@ stages:
   jobs:
     - job: deployToAppService
       displayName: 'DeployToAppService - Prod'
+
+      steps:
