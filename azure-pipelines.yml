@@ -56,7 +56,7 @@ stages:
           azureSubscription: 'AzureSC'
           appType: 'webApp'
           appName: 'InfoSafeApi'
-          package: '$(System.DefaultWorkingDirectory)/**/*.zip'
+          package: '$(Build.ArtifactStagingDirectory)/**/*.zip'
           deploymentMethod: 'auto'
       
       
