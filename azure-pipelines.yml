@@ -50,4 +50,14 @@ stages:
     - job: deployToAppService
       displayName: 'DeployToAppService - Prod'
       steps:
+
+      - task: AzureRmWebAppDeployment@4
+        inputs:
+          ConnectionType: 'AzureRM'
+          azureSubscription: 'AzureSC'
+          appType: 'webApp'
+          WebAppName: 'InfoSafeApi'
+          packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+      
+      
       
