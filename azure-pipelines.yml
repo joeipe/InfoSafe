@@ -28,6 +28,12 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
+- task: Docker@2
+  inputs:
+    containerRegistry: 'dockerhub'
+    command: 'buildAndPush'
+    Dockerfile: '**/Dockerfile'
+
 - task: VSTest@2
   inputs:
     platform: '$(buildPlatform)'
