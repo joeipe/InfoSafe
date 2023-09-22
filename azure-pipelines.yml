@@ -48,15 +48,11 @@ stages:
   condition: and(always(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   jobs:
     - job: waitForApproval
-      displayName: 'Wait for Approval'
-      timeoutInMinutes: 4320
       steps:
       - task: ManualValidation@0
+        displayName: 'Wait for Approval'
         timeoutInMinutes: 1440
         inputs:
           notifyUsers: 'joe.ipe@hotmail.com'
           instructions: 'Please validate the uat end deployment'
           onTimeout: reject
-          
-    - job: deployToAppService
-      displayName: 'DeployToAppService - Prod'
