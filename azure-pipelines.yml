@@ -60,6 +60,3 @@ stages:
           
     - job: deployToAppService
       displayName: 'DeployToAppService - Prod'
-
-      steps:
-      
