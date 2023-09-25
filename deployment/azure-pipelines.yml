@@ -42,7 +42,7 @@ stages:
       inputs:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
         ArtifactName: 'drop'
-        #publishLocation: 'Container'
+        publishLocation: 'Container'
 
 - stage: deploy_to_prod
   condition: and(always(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
@@ -64,4 +64,4 @@ stages:
           appType: 'webApp'
           WebAppName: 'InfoSafeApi'
           packageForLinux: '$(Pipeline.Workspace)/**/*.zip'
-          AppSettings: '-ASPNETCORE_ENVIRONMENT "Test"'
+          AppSettings: '-ASPNETCORE_ENVIRONMENT "Production"'
