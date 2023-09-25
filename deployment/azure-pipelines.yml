@@ -52,12 +52,13 @@ stages:
       variables:
       - group: infosafe-variable-group
       steps:
-
-      - task: DownloadPipelineArtifact@2
+      
+      - task: DownloadBuildArtifacts@1
         inputs:
           buildType: 'current'
+          downloadType: 'single'
           artifactName: 'drop'
-          targetPath: '$(Pipeline.Workspace)'
+          downloadPath: '$(System.ArtifactsDirectory)'
 
       - task: AzureRmWebAppDeployment@4
         inputs:
@@ -65,5 +66,5 @@ stages:
           azureSubscription: 'AzureSC'
           appType: 'webApp'
           WebAppName: 'InfoSafeApi'
-          packageForLinux: '$(Pipeline.Workspace)/**/*.zip'
+          packageForLinux: '$(System.ArtifactsDirectory)/drop/*.zip'
           AppSettings: '-ASPNETCORE_ENVIRONMENT "Production"'
