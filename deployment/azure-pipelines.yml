@@ -75,14 +75,14 @@ stages:
         displayName: 'files in some folder?'
         workingDirectory: ''
 
-      #- task: AzureWebApp@1
-      #  inputs:
-      #    azureSubscription: 'AzureSC'
-      #    appType: 'webApp'
-      #    appName: 'InfoSafeApi'
-      #    package: '/*.zip'
-      #    appSettings: '-ASPNETCORE_ENVIRONMENT "Production"'
-      #    deploymentMethod: 'auto'
+      - task: AzureWebApp@1
+        inputs:
+          azureSubscription: 'AzureSC'
+          appType: 'webApp'
+          appName: 'InfoSafeApi'
+          package: '$(Pipeline.Workspace)/*.zip'
+          appSettings: '-ASPNETCORE_ENVIRONMENT "Production"'
+          deploymentMethod: 'auto'
       
       #- task: DownloadPipelineArtifact@2
       #  inputs:
