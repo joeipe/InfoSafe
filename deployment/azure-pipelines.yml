@@ -49,6 +49,8 @@ stages:
   jobs:
     - job: deployToAppService
       displayName: 'DeployToAppService - Prod'
+      variables:
+      - group: infosafe-variable-group
       steps:
 
       - task: DownloadPipelineArtifact@2
