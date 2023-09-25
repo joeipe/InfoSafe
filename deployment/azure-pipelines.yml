@@ -57,7 +57,7 @@ stages:
           artifactName: 'drop'
           targetPath: '$(Pipeline.Workspace)'
 
-      - script: eccho Hello, world!
+      - script: echo Hello, world!
         displayName: 'Hello world'
 
       - script: pwd
