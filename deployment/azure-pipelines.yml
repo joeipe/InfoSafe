@@ -81,7 +81,7 @@ stages:
           azureSubscription: 'AzureSC'
           appType: 'webApp'
           WebAppName: 'InfoSafeApi'
-          packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+          packageForLinux: '$(Pipeline.Workspace)/**/*.zip'
           AppSettings: '-ASPNETCORE_ENVIRONMENT "Production"'
       
       #- task: DownloadPipelineArtifact@2
