@@ -3,6 +3,7 @@ using InfoSafe.API.CustomSwaggerDocs;
 using InfoSafe.Read.Data.Queries;
 using InfoSafe.Write.Data;
 using InfoSafe.Write.Data.Commands;
+using Microsoft.Extensions.Logging.ApplicationInsights;
 using Microsoft.OpenApi.Models;
 using Serilog;
 
@@ -50,6 +51,13 @@ try
     builder.Services
         .AddHealthChecks()
         .AddDbContextCheck<WriteDbContext>();
+
+    builder.Logging.AddApplicationInsights(
+        configureTelemetryConfiguration: (config) =>
+            config.ConnectionString = builder.Configuration.GetConnectionString("APPLICATIONINSIGHTS_CONNECTION_STRING"),
+            configureApplicationInsightsLoggerOptions: (options) => { }
+    );
+    builder.Logging.AddFilter<ApplicationInsightsLoggerProvider>("your-category", LogLevel.Trace);
 
     var app = builder.Build();
 
