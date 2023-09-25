@@ -42,7 +42,7 @@ stages:
       inputs:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
         ArtifactName: 'drop'
-        publishLocation: 'Container'
+        #publishLocation: 'Container'
 
 - stage: deploy_to_prod
   condition: and(always(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
