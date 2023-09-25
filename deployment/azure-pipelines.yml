@@ -29,7 +29,7 @@ stages:
     - task: VSBuild@1
       inputs:
         solution: '$(solution)'
-        msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
+        msbuildArgs: '/p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:PackageAsSingleFile=true /p:DeleteExistingFiles=True /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip"'
         platform: '$(buildPlatform)'
         configuration: '$(buildConfiguration)'
 
