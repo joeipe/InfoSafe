@@ -44,24 +44,48 @@ stages:
         ArtifactName: 'drop'
         publishLocation: 'Container'
 
-#- stage: deploy_to_prod
-#  condition: and(always(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-#  jobs:
-#    - job: deployToAppService
-#      displayName: 'DeployToAppService - Prod'
-#      steps:
-      
-#      - task: DownloadPipelineArtifact@2
-#        inputs:
-#          buildType: 'current'
-#          artifactName: 'drop'
-#          targetPath: '$(Pipeline.Workspace)'
+- stage: deploy_to_prod
+  condition: and(always(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  jobs:
+    - job: deployToAppService
+      displayName: 'DeployToAppService - Prod'
+      steps:
 
-#      - task: AzureWebApp@1
-#        inputs:
-#          azureSubscription: 'AzureSC'
-#          appType: 'webApp'
-#          appName: 'InfoSafeApi'
-#          package: '$(Pipeline.Workspace)/**/*.zip'
-#          appSettings: '-ASPNETCORE_ENVIRONMENT "Production"'
-#          deploymentMethod: 'auto'
+      - task: DownloadPipelineArtifact@2
+        inputs:
+          buildType: 'current'
+          artifactName: 'drop'
+          targetPath: '$(Pipeline.Workspace)'
+
+      - script: eccho Hello, world!
+        displayName: 'Hello world'
+
+      - script: pwd
+        displayName: 'directory in?'
+
+      - script: ls -la
+        displayName: 'files in artifact folder?'
+        workingDirectory: ''
+
+      - script: ls -la
+        displayName: 'files in Workspace folder?'
+        workingDirectory: '$(Pipeline.Workspace)'
+
+      - script: ls -la
+        displayName: 'files in some folder?'
+        workingDirectory: ''
+      
+      #- task: DownloadPipelineArtifact@2
+      #  inputs:
+      #    buildType: 'current'
+      #    artifactName: 'drop'
+      #    targetPath: '$(Pipeline.Workspace)'
+
+      #- task: AzureWebApp@1
+      #  inputs:
+      #    azureSubscription: 'AzureSC'
+      #    appType: 'webApp'
+      #    appName: 'InfoSafeApi'
+      #    package: '$(Pipeline.Workspace)/**/*.zip'
+      #    appSettings: '-ASPNETCORE_ENVIRONMENT "Production"'
+      #    deploymentMethod: 'auto'
