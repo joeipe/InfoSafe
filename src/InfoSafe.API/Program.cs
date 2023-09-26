@@ -54,7 +54,7 @@ try
 
     builder.Logging.AddApplicationInsights(
         configureTelemetryConfiguration: (config) =>
-            config.ConnectionString = builder.Configuration.GetConnectionString("APPLICATIONINSIGHTS_CONNECTION_STRING"),
+            config.ConnectionString = builder.Configuration.GetConnectionString("ApplicationInsightsConnectionString"),
             configureApplicationInsightsLoggerOptions: (options) => { }
     );
     builder.Logging.AddFilter<ApplicationInsightsLoggerProvider>("your-category", LogLevel.Trace);
