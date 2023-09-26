@@ -75,6 +75,12 @@ stages:
           artifactName: 'drop'
           downloadPath: '$(System.DefaultWorkingDirectory)'
       
+      - task: FileTransform@1
+        inputs:
+          folderPath: '$(System.DefaultWorkingDirectory)/**/*.zip'
+          fileType: 'json'
+          targetFiles: '**/appsettings.Production.json'
+      
       - task: AzureWebApp@1
         inputs:
           azureSubscription: 'AzureSC'
