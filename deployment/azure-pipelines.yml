@@ -38,23 +38,15 @@ stages:
       displayName: Test
       inputs:
         command: test
-        #publishTestResults: true
+        publishTestResults: true
         projects: $(buildParameters.TestProjects)
         arguments: --configuration $(BuildConfiguration) --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura'
-
-    - task: reportgenerator@4
-      displayName: Merge code coverage reports
-      inputs:
-        reports: '**/coverage.cobertura.xml'
-        targetdir: $(Build.ArtifactStagingDirectory)/coverlet
-        reporttypes: 'Cobertura'
-        verbosity: 'Verbose'
 
     - task: PublishCodeCoverageResults@1
       displayName: 'Publish code coverage report'
       inputs:
         codeCoverageTool: 'Cobertura'
-        summaryFileLocation: '$(Build.ArtifactStagingDirectory)/coverage.cobertura.xml'
+        summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
 
     - task: DotNetCoreCLI@2
       displayName: Publish
