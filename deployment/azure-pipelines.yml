@@ -38,15 +38,15 @@ stages:
       displayName: Test
       inputs:
         command: test
-        publishTestResults: true
+        publishTestResults: false
         projects: $(buildParameters.TestProjects)
-        arguments: --configuration $(BuildConfiguration) --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura'
+        arguments: '--logger trx --results-directory CodeCoverage --configuration $(buildConfiguration) --no-build --collect "XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Exclude=[Service.Data]*'
 
     - task: PublishCodeCoverageResults@1
       displayName: 'Publish code coverage report'
       inputs:
         codeCoverageTool: 'Cobertura'
-        summaryFileLocation: '$(build.SourcesDirectory)/**/coverage.cobertura.xml'
+        summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
 
     - task: DotNetCoreCLI@2
       displayName: Publish
