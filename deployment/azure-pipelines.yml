@@ -38,14 +38,15 @@ stages:
       displayName: Test
       inputs:
         command: test
+        publishTestResults: true
         projects: $(buildParameters.TestProjects)
-        arguments: --configuration $(BuildConfiguration) --collect "Code coverage"'
+        arguments: --configuration $(BuildConfiguration) --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura'
 
-    - script: dotnet test <test-project> --logger trx --collect "Code coverage"
-    - task: PublishTestResults@2
+    - task: PublishCodeCoverageResults@1
+      displayName: 'Publish code coverage report'
       inputs:
-        testRunner: VSTest
-        testResultsFiles: '**/*.trx'
+        codeCoverageTool: 'Cobertura'
+        summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
 
     - task: DotNetCoreCLI@2
       displayName: Publish
