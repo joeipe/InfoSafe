@@ -46,9 +46,7 @@ stages:
 
 - stage: deploy_to_prod
   dependsOn: Build
-  condition: |
-    succeeded()
-    and(always(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  condition: and(always(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   jobs:
     - job: deployToAppService
       displayName: 'DeployToAppService - Prod'
