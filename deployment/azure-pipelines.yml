@@ -39,7 +39,13 @@ stages:
       inputs:
         command: test
         projects: $(buildParameters.TestProjects)
-        arguments: --configuration $(BuildConfiguration)
+        arguments: --configuration $(BuildConfiguration) --collect "Code coverage"'
+
+    - script: dotnet test <test-project> --logger trx --collect "Code coverage"
+    - task: PublishTestResults@2
+      inputs:
+        testRunner: VSTest
+        testResultsFiles: '**/*.trx'
 
     - task: DotNetCoreCLI@2
       displayName: Publish
