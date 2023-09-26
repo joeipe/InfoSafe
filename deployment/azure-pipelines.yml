@@ -18,54 +18,68 @@ stages:
       solution: '**/*.sln'
       buildPlatform: 'Any CPU'
       buildConfiguration: 'Release'
+      buildParameters.RestoreBuildProjects: '**/*.csproj'
+      buildParameters.TestProjects: '**/*[Tt]ests/*.csproj'
 
     steps:
-    - task: NuGetToolInstaller@1
-
-    - task: NuGetCommand@2
+    - task: DotNetCoreCLI@2
+      displayName: Restore
       inputs:
-        restoreSolution: '$(solution)'
+        command: restore
+        projects: $(buildParameters.RestoreBuildProjects)
 
-    - task: VSBuild@1
+    - task: DotNetCoreCLI@2
+      displayName: Build
       inputs:
-        solution: '$(solution)'
-        msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
-        platform: '$(buildPlatform)'
-        configuration: '$(buildConfiguration)'
+        projects: $(buildParameters.RestoreBuildProjects)
+        arguments: --configuration $(BuildConfiguration)
 
-    #- task: VSTest@2
-    #  inputs:
-    #    platform: '$(buildPlatform)'
-    #    configuration: '$(buildConfiguration)'
-
-    - task: PublishBuildArtifacts@1
+    - task: DotNetCoreCLI@2
+      displayName: Test
       inputs:
-        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-        ArtifactName: 'drop'
-        publishLocation: 'Container'
+        command: test
+        projects: $(BuildParameters.TestProjects)
+        arguments: --configuration $(BuildConfiguration)
 
-- stage: deploy_to_prod
-  dependsOn: Build
-  condition: and(always(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-  jobs:
-    - job: deployToAppService
-      displayName: 'DeployToAppService - Prod'
-      variables:
-      - group: infosafe-variable-group
-      steps:
+    - task: DotNetCoreCLI@2
+      displayName: Publish
+      inputs:
+        command: publish
+        publishWebProjects: True
+        projects: $(BuildParameters.RestoreBuildProjects)
+        arguments: --configuration $(BuildConfiguration) --output $(build.ArtifactStagingDirectory)
+        zipAfterPublish: True
+
+    - task: PublishPipelineArtifact@1
+      displayName: Publish Artifact
+      condition: succeededOrFailed()
+      inputs:
+        targetPath: $(build.ArtifactStagingDirectory)
+        artifactName: 'myWebsiteName'
+
+
+#- stage: deploy_to_prod
+#  dependsOn: Build
+#  condition: and(always(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+#  jobs:
+#    - job: deployToAppService
+#      displayName: 'DeployToAppService - Prod'
+#      variables:
+#      - group: infosafe-variable-group
+#      steps:
       
-      - task: DownloadBuildArtifacts@1
-        inputs:
-          buildType: 'current'
-          downloadType: 'single'
-          artifactName: 'drop'
-          downloadPath: '$(System.DefaultWorkingDirectory)'
+#      - task: DownloadBuildArtifacts@1
+#        inputs:
+#          buildType: 'current'
+#          downloadType: 'single'
+#          artifactName: 'drop'
+#          downloadPath: '$(System.DefaultWorkingDirectory)'
 
-      - task: AzureRmWebAppDeployment@4
-        inputs:
-          ConnectionType: 'AzureRM'
-          azureSubscription: 'AzureSC'
-          appType: 'webApp'
-          WebAppName: 'InfoSafeApi'
-          packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
-          AppSettings: '-ASPNETCORE_ENVIRONMENT "Production"'
+#      - task: AzureRmWebAppDeployment@4
+#        inputs:
+#          ConnectionType: 'AzureRM'
+#          azureSubscription: 'AzureSC'
+#          appType: 'webApp'
+#          WebAppName: 'InfoSafeApi'
+#          packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+#          AppSettings: '-ASPNETCORE_ENVIRONMENT "Production"'
