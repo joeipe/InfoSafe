@@ -19,7 +19,7 @@ stages:
       buildPlatform: 'Any CPU'
       buildConfiguration: 'Release'
       buildParameters.RestoreBuildProjects: '**/*.csproj'
-      buildParameters.TestProjects: '**/*[Tt]ests/*.csproj'
+      buildParameters.TestProjects: '**/*UnitTests/*.csproj'
 
     steps:
     - task: DotNetCoreCLI@2
@@ -34,12 +34,12 @@ stages:
         projects: $(buildParameters.RestoreBuildProjects)
         arguments: --configuration $(BuildConfiguration)
 
-    #- task: DotNetCoreCLI@2
-    #  displayName: Test
-    #  inputs:
-    #    command: test
-    #    projects: $(buildParameters.TestProjects)
-    #    arguments: --configuration $(BuildConfiguration)
+    - task: DotNetCoreCLI@2
+      displayName: Test
+      inputs:
+        command: test
+        projects: $(buildParameters.TestProjects)
+        arguments: --configuration $(BuildConfiguration)
 
     - task: DotNetCoreCLI@2
       displayName: Publish
