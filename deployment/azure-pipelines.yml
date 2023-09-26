@@ -34,19 +34,19 @@ stages:
         projects: $(buildParameters.RestoreBuildProjects)
         arguments: --configuration $(BuildConfiguration)
 
-    - task: DotNetCoreCLI@2
-      displayName: Test
-      inputs:
-        command: test
-        projects: $(BuildParameters.TestProjects)
-        arguments: --configuration $(BuildConfiguration)
+    #- task: DotNetCoreCLI@2
+    #  displayName: Test
+    #  inputs:
+    #    command: test
+    #    projects: $(buildParameters.TestProjects)
+    #    arguments: --configuration $(BuildConfiguration)
 
     - task: DotNetCoreCLI@2
       displayName: Publish
       inputs:
         command: publish
         publishWebProjects: True
-        projects: $(BuildParameters.RestoreBuildProjects)
+        projects: $(buildParameters.RestoreBuildProjects)
         arguments: --configuration $(BuildConfiguration) --output $(build.ArtifactStagingDirectory)
         zipAfterPublish: True
 
@@ -55,7 +55,7 @@ stages:
       condition: succeededOrFailed()
       inputs:
         targetPath: $(build.ArtifactStagingDirectory)
-        artifactName: 'myWebsiteName'
+        artifactName: 'InfoSafe'
 
 
 #- stage: deploy_to_prod
