@@ -40,7 +40,7 @@ stages:
         command: test
         publishTestResults: true
         projects: $(buildParameters.TestProjects)
-        arguments: --configuration $(BuildConfiguration) --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura'
+        arguments: --configuration $(BuildConfiguration) -p:CollectCoverage=true -p:CoverletOutput=$(Build.SourcesDirectory)\TestResults\XUnit\Coverage\ -p:CoverletOutputFormat=cobertura%2copencover "--collect:\"XPlat Code Coverage\""
 
     - task: PublishCodeCoverageResults@1
       displayName: 'Publish code coverage report'
