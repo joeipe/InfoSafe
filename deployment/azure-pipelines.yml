@@ -47,7 +47,7 @@ stages:
       inputs:
         reports: '**/coverage.cobertura.xml'
         targetdir: $(Build.ArtifactStagingDirectory)/coverlet
-        reporttypes: 'Cobertura
+        reporttypes: 'Cobertura'
         verbosity: 'Verbose'
 
     - task: PublishCodeCoverageResults@1
