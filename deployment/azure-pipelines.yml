@@ -38,9 +38,9 @@ stages:
       displayName: Test
       inputs:
         command: test
-        publishTestResults: false
+        publishTestResults: true
         projects: $(buildParameters.TestProjects)
-        arguments: '--logger trx --results-directory CodeCoverage --configuration $(buildConfiguration) --no-build --collect "XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Exclude=[Service.Data]*'
+        arguments: --configuration $(BuildConfiguration) --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura'
 
     - task: PublishCodeCoverageResults@1
       displayName: 'Publish code coverage report'
