@@ -29,7 +29,7 @@ stages:
     - task: VSBuild@1
       inputs:
         solution: '$(solution)'
-        msbuildArgs: '/p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:PackageAsSingleFile=true /p:DeleteExistingFiles=True /p:publishUrl="$(build.artifactStagingDirectory)\\WebAppContent.zip"'
+        msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
         platform: '$(buildPlatform)'
         configuration: '$(buildConfiguration)'
 
@@ -45,7 +45,10 @@ stages:
         publishLocation: 'Container'
 
 - stage: deploy_to_prod
-  condition: and(always(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  dependsOn: Build
+  condition: |
+    succeeded()
+    and(always(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   jobs:
     - job: deployToAppService
       displayName: 'DeployToAppService - Prod'
@@ -58,7 +61,7 @@ stages:
           buildType: 'current'
           downloadType: 'single'
           artifactName: 'drop'
-          downloadPath: '$(System.ArtifactsDirectory)'
+          downloadPath: '$(System.DefaultWorkingDirectory)'
 
       - task: AzureRmWebAppDeployment@4
         inputs:
@@ -66,5 +69,5 @@ stages:
           azureSubscription: 'AzureSC'
           appType: 'webApp'
           WebAppName: 'InfoSafeApi'
-          packageForLinux: '$(System.ArtifactsDirectory)/drop/*.zip'
+          packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
           AppSettings: '-ASPNETCORE_ENVIRONMENT "Production"'
