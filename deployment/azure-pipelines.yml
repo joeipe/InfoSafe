@@ -74,5 +74,12 @@ stages:
           downloadType: 'single'
           artifactName: 'drop'
           downloadPath: '$(System.DefaultWorkingDirectory)'
-
-     
+      
+      - task: AzureWebApp@1
+        inputs:
+          azureSubscription: 'AzureSC'
+          appType: 'webApp'
+          appName: 'InfoSafeApi'
+          package: '$(System.DefaultWorkingDirectory)/**/*.zip'
+          appSettings: '-ASPNETCORE_ENVIRONMENT "Production"'
+          deploymentMethod: 'auto'
