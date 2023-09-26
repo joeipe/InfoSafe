@@ -50,36 +50,29 @@ stages:
         arguments: --configuration $(BuildConfiguration) --output $(build.ArtifactStagingDirectory)
         zipAfterPublish: True
 
-    - task: PublishPipelineArtifact@1
+    - task: PublishBuildArtifacts@1
       displayName: Publish Artifact
       condition: succeededOrFailed()
       inputs:
-        targetPath: $(build.ArtifactStagingDirectory)
-        artifactName: 'InfoSafe'
+        pathtoPublish: $(build.ArtifactStagingDirectory)
+        targetPath: 'drop'
 
 
-#- stage: deploy_to_prod
-#  dependsOn: Build
-#  condition: and(always(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-#  jobs:
-#    - job: deployToAppService
-#      displayName: 'DeployToAppService - Prod'
-#      variables:
-#      - group: infosafe-variable-group
-#      steps:
+- stage: deploy_to_prod
+  dependsOn: Build
+  condition: and(always(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  jobs:
+    - job: deployToAppService
+      displayName: 'DeployToAppService - Prod'
+      variables:
+      - group: infosafe-variable-group
+      steps:
       
-#      - task: DownloadBuildArtifacts@1
-#        inputs:
-#          buildType: 'current'
-#          downloadType: 'single'
-#          artifactName: 'drop'
-#          downloadPath: '$(System.DefaultWorkingDirectory)'
+      - task: DownloadBuildArtifacts@1
+        inputs:
+          buildType: 'current'
+          downloadType: 'single'
+          artifactName: 'drop'
+          downloadPath: '$(System.DefaultWorkingDirectory)'
 
-#      - task: AzureRmWebAppDeployment@4
-#        inputs:
-#          ConnectionType: 'AzureRM'
-#          azureSubscription: 'AzureSC'
-#          appType: 'webApp'
-#          WebAppName: 'InfoSafeApi'
-#          packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
-#          AppSettings: '-ASPNETCORE_ENVIRONMENT "Production"'
+     
