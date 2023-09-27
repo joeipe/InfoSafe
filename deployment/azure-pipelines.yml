@@ -73,6 +73,8 @@ stages:
       displayName: 'DeployToAppService - Prod'
       variables:
       - group: infosafe-variable-group
+      - name: Serilog.WriteTo[0].Args.connectionString
+        value: $(ConnectionStrings.DBConnectionString)
       steps:
       
       - task: DownloadBuildArtifacts@1
