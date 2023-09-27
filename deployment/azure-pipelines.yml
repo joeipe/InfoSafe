@@ -82,7 +82,7 @@ stages:
           artifactName: 'drop'
           downloadPath: '$(System.DefaultWorkingDirectory)'
       
-      - task: FileTransform@1
+      - task: FileTransform@2
         inputs:
           folderPath: '$(System.DefaultWorkingDirectory)/**/*.zip'
           fileType: 'json'
