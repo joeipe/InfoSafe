@@ -3,9 +3,9 @@ using InfoSafe.API.CustomSwaggerDocs;
 using InfoSafe.Read.Data.Queries;
 using InfoSafe.Write.Data;
 using InfoSafe.Write.Data.Commands;
-using Microsoft.Extensions.Logging.ApplicationInsights;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using static CSharpFunctionalExtensions.Result;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -27,6 +27,10 @@ try
     {
         builder.Host.UseSerilog();
     }
+
+    builder.Services.AddApplicationInsightsTelemetry(option =>
+        option.ConnectionString = builder.Configuration.GetConnectionString("ApplicationInsightsConnectionString")
+    );
 
     // Add services to the container.
     builder.Services.AddMediatR(cfg =>
@@ -51,13 +55,6 @@ try
     builder.Services
         .AddHealthChecks()
         .AddDbContextCheck<WriteDbContext>();
-
-    builder.Logging.AddApplicationInsights(
-        configureTelemetryConfiguration: (config) =>
-            config.ConnectionString = builder.Configuration.GetConnectionString("ApplicationInsightsConnectionString"),
-            configureApplicationInsightsLoggerOptions: (options) => { }
-    );
-    builder.Logging.AddFilter<ApplicationInsightsLoggerProvider>("your-category", LogLevel.Trace);
 
     var app = builder.Build();
 
