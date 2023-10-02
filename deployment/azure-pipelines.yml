@@ -107,7 +107,7 @@ stages:
             $APIMServiceName="InfoSafeApim"
             $ResourceGroupName="infosafe-rg"
             $DisplayName="InfoSafe API"
-            $ServiceURL="https://infosafeapi.azurewebsites.net/"
+            $ServiceURL="https://infosafeapi.azurewebsites.net"
             
             # API-specific details
             $APIId="InfoSafeApi"
