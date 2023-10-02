@@ -109,7 +109,7 @@ stages:
             
             # API-specific details
             $APIId="InfoSafeApi"
-            $APIPath="infosafeapi"
+            $APIPath="https://infosafeapi.azurewebsites.net/"
             $SpecificationFormat="OpenAPI"
             $SpecificationURL="https://infosafeapi.azurewebsites.net/swagger/v1/swagger.json"
             
