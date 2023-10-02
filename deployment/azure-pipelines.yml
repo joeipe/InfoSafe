@@ -96,18 +96,3 @@ stages:
           package: '$(System.DefaultWorkingDirectory)/**/*.zip'
           appSettings: '-ASPNETCORE_ENVIRONMENT "Production"'
           deploymentMethod: 'auto'
-      
-      - task: AzureCLI@2
-        inputs:
-          azureSubscription: 'AzureSC'
-          scriptType: 'ps'
-          scriptLocation: 'inlineScript'
-          inlineScript: |
-            az apim api import --specification-format Swagger
-                --subscription-required false 
-                --path "AccessHive API" 
-                --resource-group infosafe-rg 
-                --service-name InfoSafeApim 
-                --api-id InfoSafeApi 
-                --service-url "https://infosafeapi.azurewebsites.net" 
-                --specification-path "/swagger/v1/swagger.json"
