@@ -106,6 +106,7 @@ stages:
             # API Management service-specific details
             $APIMServiceName="InfoSafeApim"
             $ResourceGroupName="infosafe-rg"
+            $DisplayName="InfoSafe API"
             
             # API-specific details
             $APIId="InfoSafeApi"
@@ -114,4 +115,4 @@ stages:
             $SpecificationURL="https://infosafeapi.azurewebsites.net/swagger/v1/swagger.json"
             
             # Import API
-            az apim api import --path $APIPath --resource-group $ResourceGroupName --service-name $APIMServiceName --api-id $APIId --specification-format $SpecificationFormat --specification-url $SpecificationURL
+            az apim api import --path $APIPath --resource-group $ResourceGroupName --service-name $APIMServiceName --api-id $APIId --display-name $DisplayName --specification-format $SpecificationFormat --specification-url $SpecificationURL
