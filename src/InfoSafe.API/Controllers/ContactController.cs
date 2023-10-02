@@ -56,7 +56,7 @@ namespace InfoSafe.API.Controllers
             return result.IsSuccess ? Ok() : StatusCode(StatusCodes.Status500InternalServerError, result.Error);
         }
 
-        [HttpGet()]
+        [HttpGet]
         public ActionResult GetTest()
         {
             return Ok("Test");
