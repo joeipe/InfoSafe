@@ -113,6 +113,5 @@ stages:
             $SpecificationFormat="OpenAPI"
             $SpecificationURL="https://infosafeapi.azurewebsites.net/swagger/v1/swagger.json"
             
-            
             # Import API
             az apim api import --path $APIPath --resource-group $ResourceGroupName --service-name $APIMServiceName --api-id $APIId --specification-format $SpecificationFormat --specification-url $SpecificationURL
