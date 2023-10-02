@@ -96,3 +96,13 @@ stages:
           package: '$(System.DefaultWorkingDirectory)/**/*.zip'
           appSettings: '-ASPNETCORE_ENVIRONMENT "Production"'
           deploymentMethod: 'auto'
+      
+      - task: AzurePowerShell@5
+        inputs:
+          azureSubscription: 'AzureSC'
+          ScriptType: 'InlineScript'
+          Inline: |
+            $ApiMgmtContext = New-AzApiManagementContext -ResourceGroupName "infosafe-rg" -ServiceName "InfoSafeApim"
+            
+            Import-AzApiManagementApi -Context $ApiMgmtContext -SpecificationFormat "OpenApi" -SpecificationPath "https://infosafeapi.azurewebsites.net/swagger/v1/swagger.json" -Path "AccessHive API"
+          preferredAzurePowerShellVersion: '3.1.0'
