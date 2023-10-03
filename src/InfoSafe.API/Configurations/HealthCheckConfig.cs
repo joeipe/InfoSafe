@@ -1,12 +1,20 @@
-﻿using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+﻿using InfoSafe.Write.Data;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.Text;
 using System.Text.Json;
 
 namespace InfoSafe.API.Configurations
 {
-    public static class HealthCheckRouteBuilderExtensions
+    public static class HealthCheckConfig
     {
+        public static void AddHealthCheckConfiguration(this IServiceCollection services)
+        {
+            services
+                .AddHealthChecks()
+                .AddDbContextCheck<WriteDbContext>();
+        }
+
         public static IEndpointRouteBuilder MapDefaultHealthChecks(this IEndpointRouteBuilder endpoints)
         {
             endpoints.MapHealthChecks("/health/live", new HealthCheckOptions

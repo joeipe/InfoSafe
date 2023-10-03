@@ -1,9 +1,6 @@
 using InfoSafe.API.Configurations;
-using InfoSafe.API.CustomSwaggerDocs;
 using InfoSafe.Read.Data.Queries;
-using InfoSafe.Write.Data;
 using InfoSafe.Write.Data.Commands;
-using Microsoft.OpenApi.Models;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -45,23 +42,16 @@ try
     builder.Services.AddControllers();
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen(options =>
-    {
-        options.SwaggerDoc("v1", new OpenApiInfo { Title = "AccessHive API", Version = $"1.0" });
-        options.DocumentFilter<HealthChecksFilter>();
-    });
+    builder.Services.AddSwaggerConfiguration();
 
-    builder.Services
-        .AddHealthChecks()
-        .AddDbContextCheck<WriteDbContext>();
+    builder.Services.AddHealthCheckConfiguration();
 
     var app = builder.Build();
 
     app.UseSerilogRequestLogging();
 
     // Configure the HTTP request pipeline.
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.ApplySwagger();
 
     app.ApplyCustomExceptionMiddleware();
 
