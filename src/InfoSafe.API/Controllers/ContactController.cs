@@ -55,11 +55,5 @@ namespace InfoSafe.API.Controllers
             var result = await _mediator.Send(command);
             return result.IsSuccess ? Ok() : StatusCode(StatusCodes.Status500InternalServerError, result.Error);
         }
-
-        [HttpGet]
-        public ActionResult GetTest()
-        {
-            return Ok("Test");
-        }
     }
 }

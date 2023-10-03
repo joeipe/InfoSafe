@@ -7,13 +7,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
 using SharedKernel.Utils;
-using System;
-using System.Data.Common;
 using System.Data.SqlClient;
 
 namespace InfoSafe.IntegrationTests
@@ -24,7 +20,7 @@ namespace InfoSafe.IntegrationTests
         private const string ContainerImageUri = "mcr.microsoft.com/mssql/server:2022-latest";
         private string _containerId;
 
-        string DBConnectionString = "Server=.,1434;Database=TestAlintaPoCDb_Test;User ID=sa;Password=Admin1234;TrustServerCertificate=True";
+        private string DBConnectionString = "Server=.,1434;Database=TestAlintaPoCDb_Test;User ID=sa;Password=Admin1234;TrustServerCertificate=True";
 
         public ApiWebApplicationFactory()
         {
@@ -60,7 +56,6 @@ namespace InfoSafe.IntegrationTests
                         builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
                     })
                 );
-
 
                 // Build the service provider.
                 var serviceProvider = services.BuildServiceProvider();
@@ -146,6 +141,5 @@ namespace InfoSafe.IntegrationTests
 
             context.SaveChanges();
         }
-
     }
 }

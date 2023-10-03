@@ -5,7 +5,6 @@ using InfoSafe.Write.Data;
 using InfoSafe.Write.Data.Commands;
 using Microsoft.OpenApi.Models;
 using Serilog;
-using static CSharpFunctionalExtensions.Result;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
