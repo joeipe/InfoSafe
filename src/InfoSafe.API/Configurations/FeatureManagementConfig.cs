@@ -1,4 +1,5 @@
 ﻿using InfoSafe.API.CustomFeatureFilters;
+using InfoSafe.Write.Data;
 using Microsoft.FeatureManagement;
 using Microsoft.FeatureManagement.FeatureFilters;
 
@@ -27,6 +28,14 @@ namespace InfoSafe.API.Configurations
                 configuration.AddAzureAppConfiguration(options =>
                     options.Connect(configuration.GetConnectionString("AppConfigConnectionString"))
                     .UseFeatureFlags());
+            }
+        }
+
+        public static void ApplyFeatureManagement(this IApplicationBuilder app, string environmentName)
+        {
+            if (environmentName != "Development")
+            {
+                app.UseAzureAppConfiguration();
             }
         }
     }
