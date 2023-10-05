@@ -16,5 +16,18 @@ namespace InfoSafe.API.Configurations
                 .AddFeatureFilter<TimeWindowFilter>()
                 .AddFeatureFilter<RandomFilter>();
         }
+
+        public static void AddFeatureManagementConfiguration(this ConfigurationManager configuration, IWebHostEnvironment environment)
+        {
+            if (configuration == null) throw new ArgumentNullException(nameof(configuration));
+            if (environment == null) throw new ArgumentNullException(nameof(environment));
+
+            if (!environment.IsDevelopment())
+            {
+                configuration.AddAzureAppConfiguration(options =>
+                    options.Connect(configuration.GetConnectionString("AppConfigConnectionString"))
+                    .UseFeatureFlags());
+            }
+        }
     }
 }
