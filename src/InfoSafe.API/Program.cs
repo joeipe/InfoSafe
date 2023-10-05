@@ -44,6 +44,8 @@ try
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerConfiguration();
 
+    builder.Services.AddFeatureManagementConfiguration();
+
     builder.Services.AddHealthCheckConfiguration();
 
     var app = builder.Build();
