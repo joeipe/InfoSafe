@@ -1,6 +1,7 @@
 ﻿using InfoSafe.Read.Data;
 using InfoSafe.Write.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using System.Data.SqlClient;
 
 namespace InfoSafe.API.Configurations
@@ -20,12 +21,12 @@ namespace InfoSafe.API.Configurations
             );
         }
 
-        public static void ApplyDatabaseSchema(this IApplicationBuilder app, string environmentName)
+        public static void ApplyDatabaseSchema(this IApplicationBuilder app, IWebHostEnvironment environment)
         {
             using var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>()?.CreateScope();
             try
             {
-                if (environmentName != "IntegrationTest")
+                if (!environment.IsEnvironment("IntegrationTest"))
                 {
                     var writeDbContext = serviceScope?.ServiceProvider.GetRequiredService<WriteDbContext>();
                     serviceScope?.ServiceProvider.GetRequiredService<WriteDbContext>().Database.Migrate();
@@ -34,7 +35,7 @@ namespace InfoSafe.API.Configurations
             catch (Exception)
             {
                 Thread.Sleep(TimeSpan.FromSeconds(15));
-                app.ApplyDatabaseSchema(environmentName);
+                app.ApplyDatabaseSchema(environment);
             }
         }
     }

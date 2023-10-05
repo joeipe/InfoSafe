@@ -58,6 +58,8 @@ try
 
     app.ApplyCustomExceptionMiddleware();
 
+    app.ApplyFeatureManagement(app.Environment);
+
     app.UseHttpsRedirection();
 
     app.UseAuthorization();
@@ -66,7 +68,7 @@ try
 
     app.MapDefaultHealthChecks();
 
-    app.ApplyDatabaseSchema(app.Environment.EnvironmentName);
+    app.ApplyDatabaseSchema(app.Environment);
 
     app.Run();
 }

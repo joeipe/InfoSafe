@@ -31,9 +31,9 @@ namespace InfoSafe.API.Configurations
             }
         }
 
-        public static void ApplyFeatureManagement(this IApplicationBuilder app, string environmentName)
+        public static void ApplyFeatureManagement(this IApplicationBuilder app, IWebHostEnvironment environment)
         {
-            if (environmentName != "Development")
+            if (!environment.IsDevelopment())
             {
                 app.UseAzureAppConfiguration();
             }
