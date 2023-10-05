@@ -45,7 +45,7 @@ try
     builder.Services.AddSwaggerConfiguration();
 
     builder.Configuration.AddFeatureManagementConfiguration(builder.Environment);
-    builder.Services.AddFeatureManagementConfiguration();
+    builder.Services.AddFeatureManagementConfiguration(builder.Environment);
 
     builder.Services.AddHealthCheckConfiguration();
 

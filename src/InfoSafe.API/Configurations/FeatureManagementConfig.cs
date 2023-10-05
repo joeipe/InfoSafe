@@ -7,17 +7,6 @@ namespace InfoSafe.API.Configurations
 {
     public static class FeatureManagementConfig
     {
-        public static void AddFeatureManagementConfiguration(this IServiceCollection services)
-        {
-            if (services == null) throw new ArgumentNullException(nameof(services));
-
-            services
-                .AddFeatureManagement()
-                .AddFeatureFilter<PercentageFilter>()
-                .AddFeatureFilter<TimeWindowFilter>()
-                .AddFeatureFilter<RandomFilter>();
-        }
-
         public static void AddFeatureManagementConfiguration(this ConfigurationManager configuration, IWebHostEnvironment environment)
         {
             if (configuration == null) throw new ArgumentNullException(nameof(configuration));
@@ -28,6 +17,22 @@ namespace InfoSafe.API.Configurations
                 configuration.AddAzureAppConfiguration(options =>
                     options.Connect(configuration.GetConnectionString("AppConfigConnectionString"))
                     .UseFeatureFlags());
+            }
+        }
+
+        public static void AddFeatureManagementConfiguration(this IServiceCollection services, IWebHostEnvironment environment)
+        {
+            if (services == null) throw new ArgumentNullException(nameof(services));
+
+            services
+                .AddFeatureManagement()
+                .AddFeatureFilter<PercentageFilter>()
+                .AddFeatureFilter<TimeWindowFilter>()
+                .AddFeatureFilter<RandomFilter>();
+
+            if (!environment.IsDevelopment())
+            {
+                services.AddAzureAppConfiguration();
             }
         }
 
