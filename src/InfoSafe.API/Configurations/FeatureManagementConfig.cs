@@ -1,5 +1,6 @@
 ﻿using InfoSafe.API.CustomFeatureFilters;
 using InfoSafe.Write.Data;
+using Microsoft.Extensions.Configuration.AzureAppConfiguration.FeatureManagement;
 using Microsoft.FeatureManagement;
 using Microsoft.FeatureManagement.FeatureFilters;
 
@@ -16,7 +17,10 @@ namespace InfoSafe.API.Configurations
             {
                 configuration.AddAzureAppConfiguration(options =>
                     options.Connect(configuration.GetConnectionString("AppConfigConnectionString"))
-                    .UseFeatureFlags());
+                    .UseFeatureFlags(featureFlagOptions =>
+                    {
+                        featureFlagOptions.CacheExpirationInterval = TimeSpan.FromMinutes(1);
+                    }));
             }
         }
 
