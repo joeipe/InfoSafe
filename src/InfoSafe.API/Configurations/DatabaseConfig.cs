@@ -1,7 +1,6 @@
 ﻿using InfoSafe.Read.Data;
 using InfoSafe.Write.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
 using System.Data.SqlClient;
 
 namespace InfoSafe.API.Configurations

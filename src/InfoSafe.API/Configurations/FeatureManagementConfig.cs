@@ -1,6 +1,4 @@
 ﻿using InfoSafe.API.CustomFeatureFilters;
-using InfoSafe.Write.Data;
-using Microsoft.Extensions.Configuration.AzureAppConfiguration.FeatureManagement;
 using Microsoft.FeatureManagement;
 using Microsoft.FeatureManagement.FeatureFilters;
 
@@ -27,6 +25,7 @@ namespace InfoSafe.API.Configurations
         public static void AddFeatureManagementConfiguration(this IServiceCollection services, IWebHostEnvironment environment)
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
+            if (environment == null) throw new ArgumentNullException(nameof(environment));
 
             services
                 .AddFeatureManagement()
@@ -42,6 +41,8 @@ namespace InfoSafe.API.Configurations
 
         public static void ApplyFeatureManagement(this IApplicationBuilder app, IWebHostEnvironment environment)
         {
+            if (environment == null) throw new ArgumentNullException(nameof(environment));
+
             if (!environment.IsDevelopment())
             {
                 app.UseAzureAppConfiguration();

@@ -9,8 +9,8 @@ namespace InfoSafe.API.CustomFeatureFilters
         {
             var settings = context.Parameters.Get<RandomFilterSettings>();
 
-            if (settings != null & settings.Method == "Even") 
-            { 
+            if (settings != null & settings.Method == "Even")
+            {
                 return Task.FromResult(DateTime.Now.Ticks % 2 == 0);
             }
 
