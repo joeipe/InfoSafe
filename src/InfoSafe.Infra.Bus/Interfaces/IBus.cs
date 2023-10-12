@@ -2,6 +2,6 @@
 {
     public interface IBus
     {
-        void Send(string message, string queueName);
+        void Send(string message, string topicName);
     }
 }

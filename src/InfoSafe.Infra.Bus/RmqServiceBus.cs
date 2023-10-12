@@ -6,23 +6,22 @@ namespace InfoSafe.Infra.Bus
 {
     public class RmqServiceBus : IBus
     {
-        private readonly string _connectionString;
+        private readonly ConnectionFactory _factory;
 
         public RmqServiceBus(string connectionString)
         {
-            _connectionString = connectionString;
+            _factory = new ConnectionFactory() { HostName = connectionString };
         }
 
-        public void Send(string message, string queueName)
+        public void Send(string message, string topicName)
         {
-            var factory = new ConnectionFactory() { HostName = _connectionString };
-            using (var connection = factory.CreateConnection())
+            using (var connection = _factory.CreateConnection())
             using (var channel = connection.CreateModel())
             {
-                channel.QueueDeclare(queueName, false, false, false, null);
+                channel.QueueDeclare(topicName, false, false, false, null);
                 var body = Encoding.UTF8.GetBytes(message);
 
-                channel.BasicPublish("", queueName, null, body);
+                channel.BasicPublish("", topicName, null, body);
             }
         }
     }

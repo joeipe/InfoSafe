@@ -41,7 +41,14 @@ try
     builder.Services.AddAutoMapperConfiguration();
     builder.Services.AddScoped<InfoSafe.Write.Data.Repositories.Interfaces.IContactRepository, InfoSafe.Write.Data.Repositories.ContactRepository>();
     builder.Services.AddScoped<InfoSafe.Read.Data.Repositories.Interfaces.IContactRepository, InfoSafe.Read.Data.Repositories.ContactRepository>();
-    builder.Services.AddScoped<IBus>(c => new RmqServiceBus(builder.Configuration.GetConnectionString("RMQConnectionString")));
+    if (builder.Environment.IsDevelopment())
+    {
+        builder.Services.AddScoped<IBus>(c => new RmqServiceBus(builder.Configuration.GetConnectionString("RMQConnectionString")));
+    }
+    else
+    {
+        builder.Services.AddScoped<IBus>(c => new AzServiceBus(builder.Configuration.GetConnectionString("AzBusConnectionString")));
+    }
     builder.Services.AddScoped<MessageBus>();
     builder.Services.AddScoped<EventDispatcher>();
 
