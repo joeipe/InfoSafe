@@ -4,7 +4,7 @@ using SharedKernel.Interfaces;
 
 namespace InfoSafe.Write.Data.EventDispatchers
 {
-    public class EventDispatcher //: IEventDispatcher
+    public class EventDispatcher
     {
         private readonly MessageBus _messageBus;
 

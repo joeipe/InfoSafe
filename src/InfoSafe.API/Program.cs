@@ -5,7 +5,6 @@ using InfoSafe.Read.Data.Queries;
 using InfoSafe.Write.Data.Commands;
 using InfoSafe.Write.Data.EventDispatchers;
 using Serilog;
-using SharedKernel.Interfaces;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
