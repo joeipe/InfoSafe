@@ -23,10 +23,10 @@ namespace InfoSafe.Read.Data.Repositories
             _logger.LogInformation("{Repository}.{Action} start", nameof(ContactRepository), nameof(GetContactByIdAsync));
 
             var sql =
-                @"SELECT * FROM Contacts WHERE Id=@Id
-                  SELECT * FROM Addresses WHERE ContactId=@Id
-                  SELECT * FROM EmailAddresses WHERE ContactId=@Id
-                  SELECT * FROM PhoneNumbers WHERE ContactId=@Id";
+                @"SELECT * FROM Main.Contacts WHERE Id=@Id
+                  SELECT * FROM Main.Addresses WHERE ContactId=@Id
+                  SELECT * FROM Main.EmailAddresses WHERE ContactId=@Id
+                  SELECT * FROM Main.PhoneNumbers WHERE ContactId=@Id";
 
             Contact? contact;
             using (var multipleResults = await _dataContext.db.QueryMultipleAsync(sql, new { Id = id }))
