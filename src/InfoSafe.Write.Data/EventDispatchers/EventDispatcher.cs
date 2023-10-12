@@ -26,7 +26,7 @@ namespace InfoSafe.Write.Data.EventDispatchers
             switch (ev)
             {
                 case ContactSavedEvent contactSavedEvent:
-                    _messageBus.SendMessage(contactSavedEvent, "ContactSavedMessageQueue");
+                    _messageBus.SendMessage(contactSavedEvent, "ContactSavedMessageTopic");
                     break;
 
                 default:
