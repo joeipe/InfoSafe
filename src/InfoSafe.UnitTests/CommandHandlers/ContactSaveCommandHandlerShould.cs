@@ -5,10 +5,12 @@ using InfoSafe.API.AutoMapper;
 using InfoSafe.ViewModel;
 using InfoSafe.Write.Data.CommandHandlers;
 using InfoSafe.Write.Data.Commands;
+using InfoSafe.Write.Data.EventDispatchers;
 using InfoSafe.Write.Data.Repositories.Interfaces;
 using InfoSafe.Write.Domain;
 using Microsoft.Extensions.Logging;
 using Moq;
+using SharedKernel.Interfaces;
 using SharedKernel.Utils;
 
 namespace InfoSafe.UnitTests.CommandHandlers
@@ -17,12 +19,14 @@ namespace InfoSafe.UnitTests.CommandHandlers
     {
         private static Mock<ILogger<ContactSaveCommandHandler>> _mockLogger = null!;
         private static Mock<IContactRepository> _mockContactRepository = null!;
+        private static Mock<EventDispatcher> _mockEventDispatcher = null!;
         private static IMapper _mapper = null!;
 
         public ContactSaveCommandHandlerShould()
         {
             _mockLogger = new Mock<ILogger<ContactSaveCommandHandler>>();
             _mockContactRepository = new Mock<IContactRepository>();
+            _mockEventDispatcher = new Mock<EventDispatcher>();
 
             var mappingConfig = new MapperConfiguration(mc =>
             {
@@ -38,7 +42,7 @@ namespace InfoSafe.UnitTests.CommandHandlers
             var data = JsonFileReader.Read<ContactVM>(@"contact_invalid.json", @"UnitTestsData\");
 
             //Act
-            var sut = new ContactSaveCommandHandler(_mockLogger.Object, _mapper, _mockContactRepository.Object);
+            var sut = new ContactSaveCommandHandler(_mockLogger.Object, _mapper, _mockContactRepository.Object, _mockEventDispatcher.Object);
             var result = await sut.Handle(new ContactSaveCommand(data), new CancellationToken());
 
             //Assert
@@ -55,7 +59,7 @@ namespace InfoSafe.UnitTests.CommandHandlers
             var data = JsonFileReader.Read<ContactVM>(@"contact_add.json", @"UnitTestsData\");
 
             //Act
-            var sut = new ContactSaveCommandHandler(_mockLogger.Object, _mapper, _mockContactRepository.Object);
+            var sut = new ContactSaveCommandHandler(_mockLogger.Object, _mapper, _mockContactRepository.Object, _mockEventDispatcher.Object);
             var result = await sut.Handle(new ContactSaveCommand(data), new CancellationToken());
 
             //Assert
@@ -74,7 +78,7 @@ namespace InfoSafe.UnitTests.CommandHandlers
             _mockContactRepository.Setup(x => x.GetContactByIdAsync(It.IsAny<int>())).ReturnsAsync(It.IsAny<Contact>());
 
             //Act
-            var sut = new ContactSaveCommandHandler(_mockLogger.Object, _mapper, _mockContactRepository.Object);
+            var sut = new ContactSaveCommandHandler(_mockLogger.Object, _mapper, _mockContactRepository.Object, _mockEventDispatcher.Object);
             var result = await sut.Handle(new ContactSaveCommand(data), new CancellationToken());
 
             //Assert

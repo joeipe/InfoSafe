@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\InfoSafe.Infra.Bus\InfoSafe.Infra.Bus.csproj" />
     <ProjectReference Include="..\InfoSafe.Read.Data\InfoSafe.Read.Data.csproj" />
     <ProjectReference Include="..\InfoSafe.Write.Data\InfoSafe.Write.Data.csproj" />
     <ProjectReference Include="..\SharedKernel\SharedKernel.csproj" />

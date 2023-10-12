@@ -1,7 +1,11 @@
 using InfoSafe.API.Configurations;
+using InfoSafe.Infra.Bus;
+using InfoSafe.Infra.Bus.Interfaces;
 using InfoSafe.Read.Data.Queries;
 using InfoSafe.Write.Data.Commands;
+using InfoSafe.Write.Data.EventDispatchers;
 using Serilog;
+using SharedKernel.Interfaces;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -38,6 +42,9 @@ try
     builder.Services.AddAutoMapperConfiguration();
     builder.Services.AddScoped<InfoSafe.Write.Data.Repositories.Interfaces.IContactRepository, InfoSafe.Write.Data.Repositories.ContactRepository>();
     builder.Services.AddScoped<InfoSafe.Read.Data.Repositories.Interfaces.IContactRepository, InfoSafe.Read.Data.Repositories.ContactRepository>();
+    builder.Services.AddScoped<IBus>(c => new RmqServiceBus(builder.Configuration.GetConnectionString("RMQConnectionString")));
+    builder.Services.AddScoped<MessageBus>();
+    builder.Services.AddScoped<EventDispatcher>();
 
     builder.Services.AddControllers();
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
