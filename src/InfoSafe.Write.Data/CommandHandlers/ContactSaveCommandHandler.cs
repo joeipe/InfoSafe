@@ -54,7 +54,8 @@ namespace InfoSafe.Write.Data.CommandHandlers
             }
             await _contactRepository.SaveAsync();
 
-            _eventDispatcher.Dispatch(new ContactSavedEvent(data.Id, data.FirstName, data.LastName, data.DoB.ParseDate()));
+            var contactSavedEvent = new ContactSavedEvent(data.Id, data.FirstName, data.LastName, data.DoB.ParseDate());
+            _eventDispatcher.Dispatch(contactSavedEvent);
 
             return request.ValidationResult;
         }
