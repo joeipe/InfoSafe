@@ -7,9 +7,9 @@ namespace InfoSafe.Write.Data.Events
         public int Id { get; set; }
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
-        public DateTime DoB { get; set; }
+        public string DoB { get; set; }
 
-        public ContactSavedEvent(int id, string firstName, string lastName, DateTime doB)
+        public ContactSavedEvent(int id, string firstName, string lastName, string doB)
         {
             Id = id;
             FirstName = firstName;

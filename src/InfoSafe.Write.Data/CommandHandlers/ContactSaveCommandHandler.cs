@@ -6,6 +6,7 @@ using InfoSafe.Write.Data.Events;
 using InfoSafe.Write.Data.Repositories.Interfaces;
 using InfoSafe.Write.Domain;
 using Microsoft.Extensions.Logging;
+using SharedKernel.Extensions;
 using SharedKernel.Interfaces;
 
 namespace InfoSafe.Write.Data.CommandHandlers
@@ -53,7 +54,7 @@ namespace InfoSafe.Write.Data.CommandHandlers
             }
             await _contactRepository.SaveAsync();
 
-            _eventDispatcher.Dispatch(new ContactSavedEvent(data.Id, data.FirstName, data.LastName, data.DoB));
+            _eventDispatcher.Dispatch(new ContactSavedEvent(data.Id, data.FirstName, data.LastName, data.DoB.ParseDate()));
 
             return request.ValidationResult;
         }
