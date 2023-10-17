@@ -1,5 +1,6 @@
 using InfoSafe.API.Configurations;
 using InfoSafe.Infra.Bus;
+using InfoSafe.Infra.Bus.ExtraForLearning;
 using InfoSafe.Infra.Bus.Interfaces;
 using InfoSafe.Read.Data.Queries;
 using InfoSafe.Write.Data.Commands;
@@ -43,7 +44,7 @@ try
     builder.Services.AddScoped<InfoSafe.Read.Data.Repositories.Interfaces.IContactRepository, InfoSafe.Read.Data.Repositories.ContactRepository>();
     if (builder.Environment.IsDevelopment())
     {
-        builder.Services.AddScoped<IBus>(c => new RmqServiceBus(builder.Configuration.GetConnectionString("RMQConnectionString")));
+        builder.Services.AddScoped<IBus>(c => new RmqFanOutServiceBus(builder.Configuration.GetConnectionString("RMQConnectionString")));
     }
     else
     {
