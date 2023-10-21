@@ -2,7 +2,7 @@
 
 ## Topics covered
 
-|  **UTILS**                  |  **REPO**                   |  **TESTS**               |  **DEVOPS**               |  **AZURE**                   |  **BUS**                |
+|  **UTILS**                  |  **REPO**                   |  **TESTS**               |  **DEVOPS**               |  **AZURE**                   |  `#0969DA`**BUS**       |
 |  :---                       |  :---                       |  :---                    |  :---                     |  :---                        |  :---                   |
 |  Logging                    |  Dapper                     |  Integration Tests       |  Azure DevOps             |  Azure Application Insights  |  RabbitMQ               |
 |  Health Check               |  Entity Framework Core      |  *Unit Tests             |  Code Coverage            |  *Azure Log Analytics        |  Azure Service Bus      |
