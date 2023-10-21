@@ -2,9 +2,13 @@
 
 ## Topics covered
 
-Solarized dark             |  Solarized Ocean
-:-------------------------:|:-------------------------:
-Logging  |  Dapper
+Utils                      |  Repo                       |  Tests
+:-------------------------:|:---------------------------:|:-------------------------:
+Logging                    |  Dapper                     |  Integration Tests
+Health Check               |  Entity Framework Core      |  *Unit Tests
+Automapper                 |  Equality Comparison        |  
+MediatR                    |  Generic Repo               |  
+*Fluent Validation         |                             |  
 
 #### TODO
 > - Logging
