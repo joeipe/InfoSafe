@@ -18,6 +18,17 @@ namespace InfoSafe.Read.Data.Repositories
             _dataContext = dataContext;
         }
 
+        public async Task<List<Contact>> GetContactsAsync()
+        {
+            _logger.LogInformation("{Repository}.{Action} start", nameof(ContactRepository), nameof(GetContactsAsync));
+
+            var sql = @"SELECT * FROM Main.Contacts";
+
+            var contacts = await _dataContext.db.QueryAsync<Contact>(sql);
+
+            return contacts.ToList();
+        }
+
         public async Task<Contact> GetContactByIdAsync(int id)
         {
             _logger.LogInformation("{Repository}.{Action} start", nameof(ContactRepository), nameof(GetContactByIdAsync));

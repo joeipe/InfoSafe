@@ -27,6 +27,21 @@ namespace InfoSafe.API.Controllers
             _featureManager = featureManager;
         }
 
+        [HttpGet()]
+        public async Task<ActionResult> GetContacts()
+        {
+            var scopeInfo = new Dictionary<string, object>();
+            scopeInfo.Add("Controller", nameof(ContactController));
+            scopeInfo.Add("Action", nameof(GetContacts));
+            using (_logger.BeginScope(scopeInfo))
+                _logger.LogInformation("{ScopeInfo}", scopeInfo);
+
+            var query = new GetContactsQuery();
+            var vm = await _mediator.Send(query);
+
+            return Ok(vm);
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult> GetContactById(int id)
         {
