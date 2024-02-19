@@ -2,9 +2,10 @@
 
 namespace InfoSafe.Read.Data.Repositories.Interfaces
 {
-    public interface IContactRepository
+    public interface IContactRepository : IDapperGenericRepository<Contact>
     {
         Task<List<Contact>> GetContactsAsync();
+
         Task<Contact> GetContactByIdAsync(int id);
     }
 }

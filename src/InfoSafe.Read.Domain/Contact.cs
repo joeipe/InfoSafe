@@ -1,5 +1,8 @@
-﻿namespace InfoSafe.Read.Domain
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace InfoSafe.Read.Domain
 {
+    [Table("Main.Contacts")]
     public class Contact
     {
         public int Id { get; set; }

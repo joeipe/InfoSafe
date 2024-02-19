@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace InfoSafe.Read.Data.Repositories
 {
-    public class ContactRepository : IContactRepository
+    public class ContactRepository : DapperGenericRepository<Contact>, IContactRepository
     {
         private readonly ILogger<ContactRepository> _logger;
         private readonly ReadDbContext _dataContext;
@@ -13,6 +13,7 @@ namespace InfoSafe.Read.Data.Repositories
         public ContactRepository(
             ILogger<ContactRepository> logger,
             ReadDbContext dataContext)
+            : base(dataContext)
         {
             _logger = logger;
             _dataContext = dataContext;
@@ -22,9 +23,7 @@ namespace InfoSafe.Read.Data.Repositories
         {
             _logger.LogInformation("{Repository}.{Action} start", nameof(ContactRepository), nameof(GetContactsAsync));
 
-            var sql = @"SELECT * FROM Main.Contacts";
-
-            var contacts = await _dataContext.db.QueryAsync<Contact>(sql);
+            var contacts = await GetAllAsync();
 
             return contacts.ToList();
         }
