@@ -3,11 +3,6 @@ using InfoSafe.Read.Data.Repositories.Interfaces;
 using InfoSafe.ViewModel;
 using Microsoft.Extensions.Logging;
 using SharedKernel.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static InfoSafe.Read.Data.Queries.Queries;
 
 namespace InfoSafe.Read.Data.QueryHandlers

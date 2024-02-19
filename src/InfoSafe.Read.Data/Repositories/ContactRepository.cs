@@ -71,14 +71,14 @@ namespace InfoSafe.Read.Data.Repositories
             _logger.LogInformation("{Repository}.{Action} start", nameof(ContactRepository), nameof(GetContactByIdAsync));
 
             var sql =
-                @"SELECT * 
+                @"SELECT *
                   FROM Main.Contacts C
                    INNER JOIN Main.Addresses A ON A.ContactId=C.Id
                    INNER JOIN Main.EmailAddresses E ON E.ContactId=C.Id
                    INNER JOIN Main.PhoneNumbers P ON P.ContactId=C.Id";
 
             var contactDict = new Dictionary<int, Contact>();
-            var contacts = await _dataContext.db.QueryAsync<Contact, Address, EmailAddress, PhoneNumber, Contact>(sql, (contact, address, emailAddress, phoneNumber) => 
+            var contacts = await _dataContext.db.QueryAsync<Contact, Address, EmailAddress, PhoneNumber, Contact>(sql, (contact, address, emailAddress, phoneNumber) =>
                 {
                     if (!contactDict.TryGetValue(contact.Id, out var currentContact))
                     {
