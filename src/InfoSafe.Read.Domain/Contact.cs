@@ -11,7 +11,7 @@ namespace InfoSafe.Read.Domain
         public DateTime DoB { get; set; }
 
         public Address? Address { get; set; }
-        public List<EmailAddress>? EmailAddresses { get; set; }
+        public List<EmailAddress>? EmailAddresses { get; set; } = new List<EmailAddress>();
         public PhoneNumber? PhoneNumber { get; set; }
     }
 }

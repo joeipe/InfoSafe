@@ -25,7 +25,7 @@ namespace InfoSafe.Read.Data
 
         public async Task<IEnumerable<TEntity>> SearchForAsync(string query, object parameters = null!)
         {
-            return (await _dataContext.db.QueryAsync<TEntity>(query, parameters)).ToList();
+            return await _dataContext.db.QueryAsync<TEntity>(query, parameters);
         }
     }
 }

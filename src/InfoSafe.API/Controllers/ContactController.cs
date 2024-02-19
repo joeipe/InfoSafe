@@ -62,6 +62,21 @@ namespace InfoSafe.API.Controllers
             return Ok(vm);
         }
 
+        [HttpGet()]
+        public async Task<ActionResult> GetFullContacts()
+        {
+            var scopeInfo = new Dictionary<string, object>();
+            scopeInfo.Add("Controller", nameof(ContactController));
+            scopeInfo.Add("Action", nameof(GetFullContacts));
+            using (_logger.BeginScope(scopeInfo))
+                _logger.LogInformation("{ScopeInfo}", scopeInfo);
+
+            var query = new GetFullContactsQuery();
+            var vm = await _mediator.Send(query);
+
+            return Ok(vm);
+        }
+
         [HttpPost]
         public async Task<ActionResult> SaveContact([FromBody] ContactVM value)
         {

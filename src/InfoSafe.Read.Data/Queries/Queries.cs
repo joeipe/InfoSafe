@@ -7,5 +7,6 @@ namespace InfoSafe.Read.Data.Queries
     {
         public record GetContactsQuery() : IQuery<List<ContactVM>> { }
         public record GetContactByIdQuery(int Id) : IQuery<ContactVM> { }
+        public record GetFullContactsQuery() : IQuery<List<ContactVM>> { }
     }
 }

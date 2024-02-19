@@ -64,5 +64,35 @@ namespace InfoSafe.Read.Data.Repositories
 
             return contact;
         }
+
+        //Multi Mapping
+        public async Task<List<Contact>> GetFullContactsAsync()
+        {
+            _logger.LogInformation("{Repository}.{Action} start", nameof(ContactRepository), nameof(GetContactByIdAsync));
+
+            var sql =
+                @"SELECT * 
+                  FROM Main.Contacts C
+                   INNER JOIN Main.Addresses A ON A.ContactId=C.Id
+                   INNER JOIN Main.EmailAddresses E ON E.ContactId=C.Id
+                   INNER JOIN Main.PhoneNumbers P ON P.ContactId=C.Id";
+
+            var contactDict = new Dictionary<int, Contact>();
+            var contacts = await _dataContext.db.QueryAsync<Contact, Address, EmailAddress, PhoneNumber, Contact>(sql, (contact, address, emailAddress, phoneNumber) => 
+                {
+                    if (!contactDict.TryGetValue(contact.Id, out var currentContact))
+                    {
+                        currentContact = contact;
+                        contactDict.Add(currentContact.Id, currentContact);
+                    }
+
+                    currentContact.Address = address;
+                    currentContact.EmailAddresses?.Add(emailAddress);
+                    currentContact.PhoneNumber = phoneNumber;
+                    return currentContact;
+                });
+
+            return contacts.Distinct().ToList();
+        }
     }
 }

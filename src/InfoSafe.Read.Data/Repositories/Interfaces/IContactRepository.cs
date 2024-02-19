@@ -7,5 +7,7 @@ namespace InfoSafe.Read.Data.Repositories.Interfaces
         Task<List<Contact>> GetContactsAsync();
 
         Task<Contact> GetContactByIdAsync(int id);
+
+        Task<List<Contact>> GetFullContactsAsync();
     }
 }
