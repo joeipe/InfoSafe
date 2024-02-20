@@ -20,7 +20,6 @@ try
     if (builder.Environment.EnvironmentName != "IntegrationTest")
     {
         builder.Host.UseSerilog((ctx, lc) => lc
-            .WriteTo.Console()
             .ReadFrom.Configuration(ctx.Configuration));
     }
     else
