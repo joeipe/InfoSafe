@@ -97,26 +97,26 @@ stages:
           appSettings: '-ASPNETCORE_ENVIRONMENT "Production"'
           deploymentMethod: 'auto'
       
-      - task: AzureCLI@2
-        inputs:
-          azureSubscription: 'AzureSC'
-          scriptType: 'pscore'
-          scriptLocation: 'inlineScript'
-          inlineScript: |
-            # API Management service-specific details
-            $APIMServiceName="InfoSafeApim"
-            $ResourceGroupName="infosafe-rg"
-            $DisplayName="InfoSafe API"
-            $ServiceURL="https://infosafeapi.azurewebsites.net"
+      # - task: AzureCLI@2
+      #   inputs:
+      #     azureSubscription: 'AzureSC'
+      #     scriptType: 'pscore'
+      #     scriptLocation: 'inlineScript'
+      #     inlineScript: |
+      #       # API Management service-specific details
+      #       $APIMServiceName="InfoSafeApim"
+      #       $ResourceGroupName="infosafe-rg"
+      #       $DisplayName="InfoSafe API"
+      #       $ServiceURL="https://infosafeapi.azurewebsites.net"
             
-            # API-specific details
-            $APIId="InfoSafeApi"
-            $APIPath="infosafe"
-            $SpecificationFormat="OpenAPI"
-            $SpecificationURL="https://infosafeapi.azurewebsites.net/swagger/v1/swagger.json"
+      #       # API-specific details
+      #       $APIId="InfoSafeApi"
+      #       $APIPath="infosafe"
+      #       $SpecificationFormat="OpenAPI"
+      #       $SpecificationURL="https://infosafeapi.azurewebsites.net/swagger/v1/swagger.json"
             
-            # Import API
-            az apim api import --path $APIPath --resource-group $ResourceGroupName `
-                --service-name $APIMServiceName --api-id $APIId `
-                --display-name $DisplayName --service-url $ServiceURL `
-                --specification-format $SpecificationFormat --specification-url $SpecificationURL
+      #       # Import API
+      #       az apim api import --path $APIPath --resource-group $ResourceGroupName `
+      #           --service-name $APIMServiceName --api-id $APIId `
+      #           --display-name $DisplayName --service-url $ServiceURL `
+      #           --specification-format $SpecificationFormat --specification-url $SpecificationURL
