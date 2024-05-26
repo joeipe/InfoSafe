@@ -90,7 +90,7 @@ stages:
       
       - task: AzureWebApp@1
         inputs:
-          azureSubscription: 'AzureSC'
+          azureSubscription: 'Personal-Sub(57f4859b-8037-4106-ac17-61520b9de19b)'
           appType: 'webApp'
           appName: 'InfoSafeApi'
           package: '$(System.DefaultWorkingDirectory)/**/*.zip'
@@ -99,7 +99,7 @@ stages:
       
       # - task: AzureCLI@2
       #   inputs:
-      #     azureSubscription: 'AzureSC'
+      #     azureSubscription: 'Personal-Sub(57f4859b-8037-4106-ac17-61520b9de19b)'
       #     scriptType: 'pscore'
       #     scriptLocation: 'inlineScript'
       #     inlineScript: |
