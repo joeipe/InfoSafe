@@ -20,7 +20,8 @@ try
     if (builder.Environment.EnvironmentName != "IntegrationTest")
     {
         builder.Host.UseSerilog((ctx, lc) => lc
-            .ReadFrom.Configuration(ctx.Configuration));
+            .ReadFrom.Configuration(ctx.Configuration)
+            .Enrich.WithProperty("ApplicationName", "info safe"));
     }
     else
     {
