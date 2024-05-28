@@ -12,7 +12,7 @@ namespace InfoSafe.API.Configurations
         {
             services
                 .AddHealthChecks()
-                .AddDbContextCheck<WriteDbContext>();
+                .AddDbContextCheck<WriteDbContext>(); //.AddDbContextCheck<WriteDbContext>(tags: new string[] { "ready" });
         }
 
         public static IEndpointRouteBuilder MapDefaultHealthChecks(this IEndpointRouteBuilder endpoints)
@@ -25,6 +25,7 @@ namespace InfoSafe.API.Configurations
 
             endpoints.MapHealthChecks("/health/ready", new HealthCheckOptions
             {
+                //Predicate = reg => reg.Tags.Contains("ready"),
                 ResponseWriter = WriteJsonResponse
             });
 
