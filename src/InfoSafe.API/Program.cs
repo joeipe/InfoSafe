@@ -58,6 +58,8 @@ try
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerConfiguration();
 
+    builder.Services.AddCorsConfiguration(builder.Configuration);
+
     builder.Configuration.AddFeatureManagementConfiguration(builder.Environment);
     builder.Services.AddFeatureManagementConfiguration(builder.Environment);
 
@@ -71,6 +73,8 @@ try
     app.ApplySwagger();
 
     app.ApplyCustomExceptionMiddleware();
+
+    app.ApplyCors();
 
     app.ApplyFeatureManagement(app.Environment);
 

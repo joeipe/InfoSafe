@@ -101,11 +101,11 @@ namespace InfoSafe.API.Controllers
                 _logger.LogInformation("{ScopeInfo} - {Param}", scopeInfo);
 
             var featureInfo = new Dictionary<string, object>();
-            featureInfo.Add("FeatureA-Basic", await _featureManager.IsEnabledAsync(nameof(FeatureFlags.FeatureA)) ? "Is enabled" : "Is not enabled");
-            featureInfo.Add("FeatureB-Basic", await _featureManager.IsEnabledAsync(nameof(FeatureFlags.FeatureB)) ? "Is enabled" : "Is not enabled");
-            featureInfo.Add("FeatureC-Percentage", await _featureManager.IsEnabledAsync(nameof(FeatureFlags.FeatureC)) ? "Is enabled" : "Is not enabled");
-            featureInfo.Add("FeatureD-TimeWindow", await _featureManager.IsEnabledAsync(nameof(FeatureFlags.FeatureD)) ? "Is enabled" : "Is not enabled");
-            featureInfo.Add("FeatureE-Custom", await _featureManager.IsEnabledAsync(nameof(FeatureFlags.FeatureE)) ? "Is enabled" : "Is not enabled");
+            featureInfo.Add("featureA_basic", await _featureManager.IsEnabledAsync(nameof(FeatureFlags.FeatureA)) ? "Is enabled" : "Is not enabled");
+            featureInfo.Add("featureB_basic", await _featureManager.IsEnabledAsync(nameof(FeatureFlags.FeatureB)) ? "Is enabled" : "Is not enabled");
+            featureInfo.Add("featureC_percentage", await _featureManager.IsEnabledAsync(nameof(FeatureFlags.FeatureC)) ? "Is enabled" : "Is not enabled");
+            featureInfo.Add("featureD_timeWindow", await _featureManager.IsEnabledAsync(nameof(FeatureFlags.FeatureD)) ? "Is enabled" : "Is not enabled");
+            featureInfo.Add("featureE_custom", await _featureManager.IsEnabledAsync(nameof(FeatureFlags.FeatureE)) ? "Is enabled" : "Is not enabled");
             return Ok(featureInfo);
         }
     }
