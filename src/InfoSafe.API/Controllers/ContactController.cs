@@ -1,6 +1,7 @@
 using InfoSafe.ViewModel;
 using InfoSafe.Write.Data.Commands;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.FeatureManagement;
 using SharedKernel.Enums;
@@ -11,6 +12,7 @@ namespace InfoSafe.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]/[action]")]
+    [Authorize]
     public class ContactController : ControllerBase
     {
         private readonly ILogger<ContactController> _logger;

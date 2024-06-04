@@ -54,6 +54,8 @@ try
     builder.Services.AddScoped<EventDispatcher>();
 
     builder.Services.AddControllers();
+
+    builder.Services.AddAuthConfiguration(builder.Configuration);
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerConfiguration();
@@ -80,7 +82,7 @@ try
 
     app.UseHttpsRedirection();
 
-    app.UseAuthorization();
+    app.ApplyAuth();
 
     app.MapControllers();
 
