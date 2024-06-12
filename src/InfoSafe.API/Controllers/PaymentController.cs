@@ -50,7 +50,7 @@ namespace InfoSafe.API.Controllers
                     PaymentMethodTypes = new List<string> { "card" }
                 };
                 var service = new PaymentIntentService();
-                paymentIntent = service.Create(options);
+                paymentIntent = await service.CreateAsync(options);
                 var response = new PaymentResponse
                 {
                     ClientSecret = paymentIntent.ClientSecret
