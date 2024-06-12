@@ -41,16 +41,21 @@ namespace InfoSafe.API.Controllers
                 StripeConfiguration.ApiKey = _configuration["Stripe:ApiKey"];
                 var options = new PaymentIntentCreateOptions
                 {
-                    Amount = paymentRequest.Amount,
+                    Amount = paymentRequest.Amount*100,
                     Currency = "aud",
-                    AutomaticPaymentMethods = new PaymentIntentAutomaticPaymentMethodsOptions
-                    {
-                        Enabled = true,
-                    },
+                    //AutomaticPaymentMethods = new PaymentIntentAutomaticPaymentMethodsOptions
+                    //{
+                    //    Enabled = true,
+                    //},
+                    PaymentMethodTypes = new List<string> { "card" }
                 };
                 var service = new PaymentIntentService();
                 paymentIntent = service.Create(options);
-                return Ok(paymentIntent);
+                var response = new PaymentResponse
+                {
+                    ClientSecret = paymentIntent.ClientSecret
+                };
+                return Ok(response);
             }
             catch (Exception ex)
             {
