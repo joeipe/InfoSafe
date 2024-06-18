@@ -1,8 +1,4 @@
-﻿using InfoSafe.API.CustomFeatureFilters;
-using Microsoft.FeatureManagement.FeatureFilters;
-using Microsoft.FeatureManagement;
-
-namespace InfoSafe.API.Configurations
+﻿namespace InfoSafe.API.Configurations
 {
     public static class CorsConfig
     {

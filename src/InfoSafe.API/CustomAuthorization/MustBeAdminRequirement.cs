@@ -6,7 +6,6 @@ namespace InfoSafe.API.CustomAuthorization
     {
         public MustBeAdminRequirement()
         {
-            
         }
     }
 }

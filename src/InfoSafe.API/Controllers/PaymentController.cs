@@ -1,10 +1,6 @@
-﻿using CSharpFunctionalExtensions;
-using InfoSafe.ViewModel;
-using InfoSafe.Write.Data.Commands;
+﻿using InfoSafe.ViewModel;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SharedKernel.Extensions;
 using Stripe;
 
 namespace InfoSafe.API.Controllers
@@ -41,7 +37,7 @@ namespace InfoSafe.API.Controllers
                 StripeConfiguration.ApiKey = _configuration["Stripe:ApiKey"];
                 var options = new PaymentIntentCreateOptions
                 {
-                    Amount = paymentRequest.Amount*100,
+                    Amount = paymentRequest.Amount * 100,
                     Currency = "aud",
                     //AutomaticPaymentMethods = new PaymentIntentAutomaticPaymentMethodsOptions
                     //{

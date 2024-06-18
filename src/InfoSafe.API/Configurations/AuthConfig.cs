@@ -1,13 +1,11 @@
 ﻿using InfoSafe.API.CustomAuthorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Builder;
 
 namespace InfoSafe.API.Configurations
 {
     public static class AuthConfig
     {
-
         public static void AddAuthenticationConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
