@@ -1,4 +1,5 @@
 using InfoSafe.API.Configurations;
+using InfoSafe.API.Services;
 using InfoSafe.Infra.Bus;
 using InfoSafe.Infra.Bus.ExtraForLearning;
 using InfoSafe.Infra.Bus.Interfaces;
@@ -6,6 +7,7 @@ using InfoSafe.Read.Data.Queries;
 using InfoSafe.Write.Data.Commands;
 using InfoSafe.Write.Data.EventDispatchers;
 using Serilog;
+using Stripe;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -52,10 +54,13 @@ try
     }
     builder.Services.AddScoped<MessageBus>();
     builder.Services.AddScoped<EventDispatcher>();
+    builder.Services.AddScoped<UserService>();
 
     builder.Services.AddControllers();
 
-    builder.Services.AddAuthConfiguration(builder.Configuration);
+    builder.Services.AddAuthenticationConfiguration(builder.Configuration);
+    builder.Services.AddAuthorizationConfiguration();
+
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerConfiguration();

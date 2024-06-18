@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using InfoSafe.API.CustomAuthorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 
 namespace InfoSafe.API.Configurations
@@ -6,10 +8,12 @@ namespace InfoSafe.API.Configurations
     public static class AuthConfig
     {
 
-        public static void AddAuthConfiguration(this IServiceCollection services, IConfiguration configuration)
+        public static void AddAuthenticationConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
             if (configuration == null) throw new ArgumentNullException(nameof(configuration));
+
+            services.AddHttpContextAccessor();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
@@ -19,6 +23,23 @@ namespace InfoSafe.API.Configurations
                     //options.TokenValidationParameters.ValidateIssuer = false;
                     options.TokenValidationParameters.ValidIssuer = configuration["AzureAD:ValidIssuer"];
                 });
+        }
+
+        public static void AddAuthorizationConfiguration(this IServiceCollection services)
+        {
+            if (services == null) throw new ArgumentNullException(nameof(services));
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(
+                    "IsAdmin",
+                    policyBuilder =>
+                    {
+                        policyBuilder.RequireAuthenticatedUser();
+                        policyBuilder.AddRequirements(new MustBeAdminRequirement());
+                    });
+            });
+            services.AddScoped<IAuthorizationHandler, MustBeAdminHandler>();
         }
 
         public static void ApplyAuth(this IApplicationBuilder app)

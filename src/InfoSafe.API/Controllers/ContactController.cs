@@ -1,3 +1,4 @@
+using InfoSafe.API.Services;
 using InfoSafe.ViewModel;
 using InfoSafe.Write.Data.Commands;
 using MediatR;
@@ -32,6 +33,7 @@ namespace InfoSafe.API.Controllers
         [HttpGet()]
         public async Task<ActionResult> GetContacts()
         {
+
             var scopeInfo = new Dictionary<string, object>();
             scopeInfo.Add("Controller", nameof(ContactController));
             scopeInfo.Add("Action", nameof(GetContacts));
@@ -94,6 +96,7 @@ namespace InfoSafe.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "IsAdmin")]
         public async Task<ActionResult> GetFeatureTest()
         {
             var scopeInfo = new Dictionary<string, object>();
