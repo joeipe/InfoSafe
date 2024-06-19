@@ -22,7 +22,6 @@ namespace InfoSafe.API.Controllers
         }
 
         [HttpGet]
-        [Authorize(Policy = "IsAdmin")]
         public async Task<ActionResult> GetFeatureTest()
         {
             var scopeInfo = new Dictionary<string, object>();

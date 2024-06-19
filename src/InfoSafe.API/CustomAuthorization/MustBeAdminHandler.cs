@@ -17,7 +17,7 @@ namespace InfoSafe.API.CustomAuthorization
         {
             var userId = _userService.UserId;
 
-            if (userId != Guid.Parse("129587be-e15b-4c74-a02c-8f39f4b209e8"))
+            if (userId != Guid.Parse("f47a627f-daee-4491-a1be-1a3a918e982f"))
             {
                 context.Fail();
                 return Task.CompletedTask;
