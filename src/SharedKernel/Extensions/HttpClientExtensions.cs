@@ -28,7 +28,7 @@ namespace SharedKernel.Extensions
             if (!response.IsSuccessStatusCode)
                 throw new ApplicationException($"Something went wrong calling the API: {response.ReasonPhrase}");
 
-            var dataAsString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var dataAsString = await response.Content.ReadAsStringAsync();
 
             return JsonSerializer.Deserialize<T>(dataAsString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         }

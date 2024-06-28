@@ -1,5 +1,7 @@
 using InfoSafe.API.Configurations;
 using InfoSafe.API.Services;
+using InfoSafe.Infra.BlobStorage.Interfaces;
+using InfoSafe.Infra.BlobStorage;
 using InfoSafe.Infra.Bus;
 using InfoSafe.Infra.Bus.ExtraForLearning;
 using InfoSafe.Infra.Bus.Interfaces;
@@ -7,6 +9,8 @@ using InfoSafe.Read.Data.Queries;
 using InfoSafe.Write.Data.Commands;
 using InfoSafe.Write.Data.EventDispatchers;
 using Serilog;
+using Stripe;
+using Microsoft.AspNetCore.StaticFiles;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -54,6 +58,8 @@ try
     builder.Services.AddScoped<MessageBus>();
     builder.Services.AddScoped<EventDispatcher>();
     builder.Services.AddScoped<UserService>();
+    builder.Services.AddScoped<IAzFileStorage>(c => new AzFileStorage(builder.Configuration.GetConnectionString("StorageConnectionString")));
+    builder.Services.AddSingleton<FileExtensionContentTypeProvider>();
 
     builder.Services.AddControllers();
 
