@@ -104,37 +104,51 @@ namespace InfoSafe.API.Controllers
                 _logger.LogInformation("{ScopeInfo} - {Param}", scopeInfo, new { fileName });
 
             var client = await _fileStorage.GetBlobClientAsync(fileName);
-            var content = await client.DownloadContentAsync();
-            string contentType = content.Value.Details.ContentType;
-
-            var streamToWrite = new MemoryStream();
-            await _fileStorage.DownloadFileAsync(client, streamToWrite);
-
-            if (streamToWrite == null)
+            if (await client.ExistsAsync())
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"File {fileName} could not be downloaded.");
-            }
-            else
-            {
+                var content = await client.DownloadContentAsync();
+                string contentType = content.Value.Details.ContentType;
+
+                var streamToWrite = new MemoryStream();
+                await _fileStorage.DownloadFileAsync(client, streamToWrite);
+
                 return Ok(new BlobVM
                 {
-                    //Content = streamToWrite,
+                    ContentByte = streamToWrite.ToArray(),
                     Name = client.Name,
                     ContentType = contentType
                 });
             }
+
+            return null;
         }
 
-        /*
-        [HttpDelete("DeleteFile")]
-        public async Task<ActionResult> DeleteFile([FromBody] BlobFileRequest request)
+        [HttpDelete("{fileName}")]
+        public async Task<ActionResult> DeleteFile(string fileName)
         {
-            var blob = await _fileStorage.GetCloudBlockBlobAsync(request.BlobName);
+            var scopeInfo = new Dictionary<string, object>();
+            scopeInfo.Add("Controller", nameof(BlobStorageController));
+            scopeInfo.Add("Action", nameof(DeleteFile));
+            using (_logger.BeginScope(scopeInfo))
+                _logger.LogInformation("{ScopeInfo} - {Param}", scopeInfo, new { fileName });
 
-            await _fileStorage.DeleteFileAsync(blob);
+            BlobResponseVM response = new();
+            var client = await _fileStorage.GetBlobClientAsync(fileName);
 
-            return Ok();
+            if (await client.ExistsAsync())
+            {
+                await _fileStorage.DeleteFileAsync(client);
+
+                response.Error = false;
+                response.Status = $"File: {fileName} has been successfully deleted.";
+            }
+            else
+            {
+                response.Error = true;
+                response.Status = $"File with name {fileName} not found.";
+            }
+
+            return Ok(response);
         }
-        */
     }
 }

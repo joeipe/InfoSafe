@@ -67,14 +67,10 @@ namespace InfoSafe.Infra.BlobStorage
             }
         }
 
-        /*
-        public async Task DeleteFileAsync(BlobClient blob)
+        public async Task DeleteFileAsync(BlobClient client)
         {
-            if (blob == null)
-                throw new ArgumentNullException(nameof(blob));
-
-            await blob.DeleteAsync();
-        }*/
+            await client.DeleteAsync();
+        }
 
         #region Private
 

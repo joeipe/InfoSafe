@@ -13,8 +13,8 @@ namespace InfoSafe.Infra.BlobStorage.Interfaces
 
         Task<BlobClient> GetBlobClientAsync(string blobName);
 
-        Task DownloadFileAsync(BlobClient blobClient, Stream targetStream);
+        Task DownloadFileAsync(BlobClient client, Stream targetStream);
 
-        //Task DeleteFileAsync(BlobClient blob);
+        Task DeleteFileAsync(BlobClient client);
     }
 }
