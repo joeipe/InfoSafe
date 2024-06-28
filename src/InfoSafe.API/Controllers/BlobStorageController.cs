@@ -107,9 +107,10 @@ namespace InfoSafe.API.Controllers
             var content = await client.DownloadContentAsync();
             string contentType = content.Value.Details.ContentType;
 
-            Stream stream = await _fileStorage.DownloadFileAsync(client);
+            var streamToWrite = new MemoryStream();
+            await _fileStorage.DownloadFileAsync(client, streamToWrite);
 
-            if (stream == null)
+            if (streamToWrite == null)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, $"File {fileName} could not be downloaded.");
             }
@@ -117,7 +118,7 @@ namespace InfoSafe.API.Controllers
             {
                 return Ok(new BlobVM
                 {
-                    Content = stream,
+                    //Content = streamToWrite,
                     Name = client.Name,
                     ContentType = contentType
                 });

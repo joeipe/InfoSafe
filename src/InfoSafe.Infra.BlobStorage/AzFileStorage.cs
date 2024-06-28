@@ -59,17 +59,12 @@ namespace InfoSafe.Infra.BlobStorage
             return client;
         }
 
-        public async Task<Stream> DownloadFileAsync(BlobClient client)
+        public async Task DownloadFileAsync(BlobClient client, Stream targetStream)
         {
             if (await client.ExistsAsync())
             {
-                var data = await client.OpenReadAsync();
-                Stream blobContent = data;
-
-                return blobContent;
+                await client.DownloadToAsync(targetStream);
             }
-
-            return null;
         }
 
         /*
