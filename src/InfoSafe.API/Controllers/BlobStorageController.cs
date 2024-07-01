@@ -4,6 +4,8 @@ using InfoSafe.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Net.Http.Headers;
+using System.IO;
+using System.Web;
 
 namespace InfoSafe.API.Controllers
 {
@@ -78,7 +80,7 @@ namespace InfoSafe.API.Controllers
 
             var (uri, cloudBlobs) = await _fileStorage.ListFileBlobsAsync(prefix);
 
-            foreach (var file in cloudBlobs)
+            foreach (var file in cloudBlobs.Where(x => x.Properties.ContentType == "image/jpeg"))
             {
                 var name = file.Name;
                 var fullUri = $"{uri}/{name}";
@@ -103,6 +105,7 @@ namespace InfoSafe.API.Controllers
             using (_logger.BeginScope(scopeInfo))
                 _logger.LogInformation("{ScopeInfo} - {Param}", scopeInfo, new { fileName });
 
+            fileName = HttpUtility.UrlDecode(fileName);
             var client = await _fileStorage.GetBlobClientAsync(fileName);
             if (await client.ExistsAsync())
             {
@@ -112,9 +115,11 @@ namespace InfoSafe.API.Controllers
                 var streamToWrite = new MemoryStream();
                 await _fileStorage.DownloadFileAsync(client, streamToWrite);
 
+                string base64String = Convert.ToBase64String(streamToWrite.ToArray());
+
                 return Ok(new BlobVM
                 {
-                    ContentByte = streamToWrite.ToArray(),
+                    Content = $"data:{contentType};base64,{base64String}",
                     Name = client.Name,
                     ContentType = contentType
                 });
@@ -132,6 +137,7 @@ namespace InfoSafe.API.Controllers
             using (_logger.BeginScope(scopeInfo))
                 _logger.LogInformation("{ScopeInfo} - {Param}", scopeInfo, new { fileName });
 
+            fileName = HttpUtility.UrlDecode(fileName);
             BlobResponseVM response = new();
             var client = await _fileStorage.GetBlobClientAsync(fileName);
 
