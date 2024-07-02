@@ -82,7 +82,7 @@ namespace InfoSafe.API.Controllers
 
             var (uri, cloudBlobs) = await _fileStorage.ListFileBlobsAsync(prefix);
 
-            foreach (var file in cloudBlobs.Where(x => x.Properties.ContentType == "image/jpeg"))
+            foreach (var file in cloudBlobs)
             {
                 var name = file.Name;
                 var fullUri = $"{uri}/{name}";
@@ -95,7 +95,7 @@ namespace InfoSafe.API.Controllers
                 });
             }
 
-            return Ok(files);
+            return Ok(files.OrderBy(x => x.Name));
         }
 
         [HttpPost()]
