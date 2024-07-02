@@ -98,17 +98,17 @@ namespace InfoSafe.API.Controllers
             return Ok(files);
         }
 
-        [HttpGet("{fileName}")]
-        public async Task<ActionResult> DownloadFile(string fileName)
+        [HttpPost()]
+        public async Task<ActionResult> DownloadFile([FromBody] BlobRequestVM value)
         {
             var scopeInfo = new Dictionary<string, object>();
             scopeInfo.Add("Controller", nameof(BlobStorageController));
             scopeInfo.Add("Action", nameof(DownloadFile));
             using (_logger.BeginScope(scopeInfo))
-                _logger.LogInformation("{ScopeInfo} - {Param}", scopeInfo, new { fileName });
+                _logger.LogInformation("{ScopeInfo} - {Param}", scopeInfo, new { value.FileName });
 
-            fileName = HttpUtility.UrlDecode(fileName);
-            var client = await _fileStorage.GetBlobClientAsync(fileName);
+            value.FileName = HttpUtility.UrlDecode(value.FileName);
+            var client = await _fileStorage.GetBlobClientAsync(value.FileName);
             if (await client.ExistsAsync())
             {
                 var content = await client.DownloadContentAsync();
