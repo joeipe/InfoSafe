@@ -130,30 +130,30 @@ namespace InfoSafe.API.Controllers
             return null;
         }
 
-        [HttpDelete("{fileName}")]
-        public async Task<ActionResult> DeleteFile(string fileName)
+        [HttpDelete()]
+        public async Task<ActionResult> DeleteFile([FromBody] BlobRequestVM value)
         {
             var scopeInfo = new Dictionary<string, object>();
             scopeInfo.Add("Controller", nameof(BlobStorageController));
             scopeInfo.Add("Action", nameof(DeleteFile));
             using (_logger.BeginScope(scopeInfo))
-                _logger.LogInformation("{ScopeInfo} - {Param}", scopeInfo, new { fileName });
+                _logger.LogInformation("{ScopeInfo} - {Param}", scopeInfo, new { value.FileName });
 
-            fileName = HttpUtility.UrlDecode(fileName);
+            value.FileName = HttpUtility.UrlDecode(value.FileName);
             BlobResponseVM response = new();
-            var client = await _fileStorage.GetBlobClientAsync(fileName);
+            var client = await _fileStorage.GetBlobClientAsync(value.FileName);
 
             if (await client.ExistsAsync())
             {
                 await _fileStorage.DeleteFileAsync(client);
 
                 response.Error = false;
-                response.Status = $"File: {fileName} has been successfully deleted.";
+                response.Status = $"File: {value.FileName} has been successfully deleted.";
             }
             else
             {
                 response.Error = true;
-                response.Status = $"File with name {fileName} not found.";
+                response.Status = $"File with name {value.FileName} not found.";
             }
 
             return Ok(response);
