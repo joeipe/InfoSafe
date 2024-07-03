@@ -30,11 +30,11 @@ namespace InfoSafe.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Upload(IFormFile blob)
+        public async Task<IActionResult> UploadFile(IFormFile blob)
         {
             var scopeInfo = new Dictionary<string, object>();
             scopeInfo.Add("Controller", nameof(BlobStorageController));
-            scopeInfo.Add("Action", nameof(Upload));
+            scopeInfo.Add("Action", nameof(UploadFile));
             using (_logger.BeginScope(scopeInfo))
                 _logger.LogInformation("{ScopeInfo} - {Param}", scopeInfo, new { blob.FileName });
 
