@@ -1,18 +1,14 @@
 ﻿using Azure.Storage.Blobs;
 using InfoSafe.Infra.BlobStorage.Interfaces;
 using InfoSafe.ViewModel;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
-using Microsoft.Net.Http.Headers;
-using System.IO;
 using System.Web;
 
 namespace InfoSafe.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]/[action]")]
-    [Authorize]
     public class BlobStorageController : ControllerBase
     {
         private readonly ILogger<BlobStorageController> _logger;
@@ -86,12 +82,18 @@ namespace InfoSafe.API.Controllers
             {
                 var name = file.Name;
                 var fullUri = $"{uri}/{name}";
+                var metadata = new BlobMetaDataVM
+                {
+                    Title = file.Metadata.ContainsKey("title") ? file.Metadata["title"] : null,
+                    Description = file.Metadata.ContainsKey("description") ? file.Metadata["description"] : null,
+                };
 
                 files.Add(new BlobVM
                 {
                     Uri = fullUri,
                     Name = name,
-                    ContentType = file.Properties.ContentType
+                    ContentType = file.Properties.ContentType,
+                    MetaData = metadata
                 });
             }
 
@@ -157,6 +159,42 @@ namespace InfoSafe.API.Controllers
             }
 
             return Ok(response);
+        }
+
+        [HttpPost()]
+        public async Task<ActionResult> GetBlobMetadata([FromBody] BlobRequestVM value)
+        {
+            var scopeInfo = new Dictionary<string, object>();
+            scopeInfo.Add("Controller", nameof(BlobStorageController));
+            scopeInfo.Add("Action", nameof(GetBlobMetadata));
+            using (_logger.BeginScope(scopeInfo))
+                _logger.LogInformation("{ScopeInfo} - {Param}", scopeInfo, new { value.FileName });
+
+            value.FileName = HttpUtility.UrlDecode(value.FileName);
+            var client = await _fileStorage.GetBlobClientAsync(value.FileName);
+
+            var (title, description) = await _fileStorage.GetBlobMetadataAsync(client);
+
+            return Ok(new { Title = title, Description = description });
+        }
+
+        [HttpPost()]
+        public async Task<ActionResult> UpdateMetadata([FromBody] BlobRequestVM value)
+        {
+            var scopeInfo = new Dictionary<string, object>();
+            scopeInfo.Add("Controller", nameof(BlobStorageController));
+            scopeInfo.Add("Action", nameof(UpdateMetadata));
+            using (_logger.BeginScope(scopeInfo))
+                _logger.LogInformation("{ScopeInfo} - {Param}", scopeInfo, new { value.FileName });
+
+            value.FileName = HttpUtility.UrlDecode(value.FileName);
+            var client = await _fileStorage.GetBlobClientAsync(value.FileName);
+            if (value.MetaData != null)
+            {
+                await _fileStorage.UpdateBlobMetadataAsync(client, value.MetaData.Title, value.MetaData.Description);
+            }
+
+            return Ok();
         }
     }
 }
