@@ -1,6 +1,7 @@
 ﻿using Azure.Storage.Blobs;
 using InfoSafe.Infra.BlobStorage.Interfaces;
 using InfoSafe.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using System.Web;
@@ -9,6 +10,7 @@ namespace InfoSafe.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]/[action]")]
+    [Authorize]
     public class BlobStorageController : ControllerBase
     {
         private readonly ILogger<BlobStorageController> _logger;
