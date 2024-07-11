@@ -17,8 +17,12 @@ namespace InfoSafe.Infra.BlobStorage.Interfaces
 
         Task DeleteFileAsync(BlobClient client);
 
+        // Metadata
         Task<(string title, string description)> GetBlobMetadataAsync(BlobClient client);
 
         Task UpdateBlobMetadataAsync(BlobClient client, string title, string description);
+
+        // SAS
+        string GetBlobUriWithSasToken(BlobClient client);
     }
 }

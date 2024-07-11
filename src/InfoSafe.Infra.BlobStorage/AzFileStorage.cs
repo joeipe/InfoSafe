@@ -1,5 +1,6 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using Azure.Storage.Sas;
 using InfoSafe.Infra.BlobStorage.Interfaces;
 
 namespace InfoSafe.Infra.BlobStorage
@@ -77,6 +78,7 @@ namespace InfoSafe.Infra.BlobStorage
             await client.DeleteAsync();
         }
 
+        // Metadata
         public async Task<(string title, string description)> GetBlobMetadataAsync(BlobClient client)
         {
             BlobProperties properties = await client.GetPropertiesAsync();
@@ -93,6 +95,14 @@ namespace InfoSafe.Infra.BlobStorage
             var metadata = SetMetadata(title, description);
 
             await client.SetMetadataAsync(metadata);
+        }
+
+        // SAS
+        public string GetBlobUriWithSasToken(BlobClient client)
+        {
+            var sasToken = client.GenerateSasUri(BlobSasPermissions.Read, DateTime.Now.AddDays(1));
+
+            return sasToken.ToString();
         }
 
         #region Private Container

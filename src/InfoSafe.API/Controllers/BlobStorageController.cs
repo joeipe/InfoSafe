@@ -82,6 +82,9 @@ namespace InfoSafe.API.Controllers
 
             foreach (var file in cloudBlobs)
             {
+                var client = await _fileStorage.GetBlobClientAsync(file.Name);
+                var fullUriWithSasToken = _fileStorage.GetBlobUriWithSasToken(client);
+
                 var name = file.Name;
                 var fullUri = $"{uri}/{name}";
                 var metadata = new BlobMetaDataVM
@@ -93,6 +96,7 @@ namespace InfoSafe.API.Controllers
                 files.Add(new BlobVM
                 {
                     Uri = fullUri,
+                    UriWithSasToken = fullUriWithSasToken,
                     Name = name,
                     ContentType = file.Properties.ContentType,
                     MetaData = metadata
