@@ -15,6 +15,8 @@ namespace InfoSafe.Infra.BlobStorage.Interfaces
 
         Task DownloadFileAsync(BlobClient client, Stream targetStream);
 
+        Task OverwriteFileAsync(BlobClient client, Stream fileStream, string contentType);
+
         Task DeleteFileAsync(BlobClient client);
 
         // Metadata

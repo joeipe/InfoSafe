@@ -1,7 +1,9 @@
-﻿using Azure.Storage.Blobs;
+﻿using Azure;
+using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Azure.Storage.Sas;
 using InfoSafe.Infra.BlobStorage.Interfaces;
+using System.Reflection.PortableExecutable;
 
 namespace InfoSafe.Infra.BlobStorage
 {
@@ -9,7 +11,7 @@ namespace InfoSafe.Infra.BlobStorage
     {
         private readonly string _storageConnectionString;
 
-        private readonly string _containerNameBaby = "baby";
+        private readonly string _containerNameBaby = "infosafe";
 
         private readonly string _metadataKeyTitle = "title";
         private readonly string _metadataKeyDescription = "description";
@@ -73,6 +75,15 @@ namespace InfoSafe.Infra.BlobStorage
             }
         }
 
+        public async Task OverwriteFileAsync(BlobClient client, Stream fileStream, string contentType)
+        {
+            var headers = new BlobHttpHeaders
+            {
+                ContentType = contentType
+            };
+            await client.UploadAsync(fileStream, headers);
+        }
+
         public async Task DeleteFileAsync(BlobClient client)
         {
             await client.DeleteAsync();
@@ -92,9 +103,29 @@ namespace InfoSafe.Infra.BlobStorage
 
         public async Task UpdateBlobMetadataAsync(BlobClient client, string title, string description)
         {
-            var metadata = SetMetadata(title, description);
+            try
+            {
+                BlobProperties properties = await client.GetPropertiesAsync();
+                var etagCondition = new BlobRequestConditions()
+                {
+                    IfMatch = properties.ETag
+                };
 
-            await client.SetMetadataAsync(metadata);
+                var metadata = SetMetadata(title, description);
+
+                await client.SetMetadataAsync(metadata, conditions: etagCondition);
+            }
+            catch (RequestFailedException ex)
+            {
+                if (ex.ErrorCode == BlobErrorCode.ConditionNotMet)
+                {
+                    throw new ArgumentException("Concurrency Error");
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         // SAS
