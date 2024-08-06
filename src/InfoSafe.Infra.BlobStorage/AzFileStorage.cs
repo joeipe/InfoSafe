@@ -3,6 +3,8 @@ using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Azure.Storage.Sas;
 using InfoSafe.Infra.BlobStorage.Interfaces;
+using System.Diagnostics;
+using System.Reflection.Metadata;
 using System.Reflection.PortableExecutable;
 
 namespace InfoSafe.Infra.BlobStorage
@@ -11,7 +13,8 @@ namespace InfoSafe.Infra.BlobStorage
     {
         private readonly string _storageConnectionString;
 
-        private readonly string _containerNameBaby = "infosafe";
+        private readonly string _containerNameInfosafe = "infosafe";
+        private readonly string _containerNameInfosafeArchive = "infosafe-archive";
 
         private readonly string _metadataKeyTitle = "title";
         private readonly string _metadataKeyDescription = "description";
@@ -23,7 +26,7 @@ namespace InfoSafe.Infra.BlobStorage
 
         public async Task<BlobClient> UploadFileAsync(Stream fileStream, string blobName, string contentType)
         {
-            var container = await GetBabyContainerAsync();
+            var container = await GetInfosafeContainerAsync();
 
             BlobClient client = container.GetBlobClient(blobName);
             var headers = new BlobHttpHeaders
@@ -38,7 +41,7 @@ namespace InfoSafe.Infra.BlobStorage
 
         public async Task<bool> CheckIfBlobExistsAsync(string blobName)
         {
-            var container = await GetBabyContainerAsync();
+            var container = await GetInfosafeContainerAsync();
 
             BlobClient client = container.GetBlobClient(blobName);
 
@@ -48,7 +51,7 @@ namespace InfoSafe.Infra.BlobStorage
         public async Task<(string, List<BlobItem>)> ListFileBlobsAsync(string? prefix = null)
         {
             var cloudBlobs = new List<BlobItem>();
-            var container = await GetBabyContainerAsync();
+            var container = await GetInfosafeContainerAsync();
 
             await foreach (BlobItem blob in container.GetBlobsAsync(BlobTraits.Metadata, BlobStates.None, prefix))
             {
@@ -60,7 +63,7 @@ namespace InfoSafe.Infra.BlobStorage
 
         public async Task<BlobClient> GetBlobClientAsync(string blobName)
         {
-            var container = await GetBabyContainerAsync();
+            var container = await GetInfosafeContainerAsync();
 
             BlobClient client = container.GetBlobClient(blobName);
 
@@ -136,11 +139,32 @@ namespace InfoSafe.Infra.BlobStorage
             return sasToken.ToString();
         }
 
+        //Archive
+        public async Task ArchiveFileAsync(BlobClient client)
+        {
+            var container = await GetInfosafeArchiveContainerAsync();
+
+            BlobClient copyClient = container.GetBlobClient(client.Name);
+            BlobCopyFromUriOptions copyOptions = new()
+            {
+                AccessTier = AccessTier.Archive
+            };
+            var copyOp = await copyClient.StartCopyFromUriAsync(client.Uri, copyOptions);
+            await copyOp.WaitForCompletionAsync();
+
+            await client.DeleteIfExistsAsync();
+        }
+
         #region Private Container
 
-        private async Task<BlobContainerClient> GetBabyContainerAsync()
+        private async Task<BlobContainerClient> GetInfosafeContainerAsync()
         {
-            return await GetContainerAsync(_containerNameBaby);
+            return await GetContainerAsync(_containerNameInfosafe);
+        }
+
+        private async Task<BlobContainerClient> GetInfosafeArchiveContainerAsync()
+        {
+            return await GetContainerAsync(_containerNameInfosafeArchive);
         }
 
         private async Task<BlobContainerClient> GetContainerAsync(string containerName)

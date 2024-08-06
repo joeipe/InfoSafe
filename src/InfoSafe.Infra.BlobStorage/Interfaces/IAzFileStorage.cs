@@ -26,5 +26,8 @@ namespace InfoSafe.Infra.BlobStorage.Interfaces
 
         // SAS
         string GetBlobUriWithSasToken(BlobClient client);
+
+        //Archive
+        Task ArchiveFileAsync(BlobClient client);
     }
 }

@@ -202,5 +202,22 @@ namespace InfoSafe.API.Controllers
 
             return Ok();
         }
+
+        [HttpPost()]
+        public async Task<ActionResult> ArchiveFile([FromBody] BlobRequestVM value)
+        {
+            var scopeInfo = new Dictionary<string, object>();
+            scopeInfo.Add("Controller", nameof(BlobStorageController));
+            scopeInfo.Add("Action", nameof(ArchiveFile));
+            using (_logger.BeginScope(scopeInfo))
+                _logger.LogInformation("{ScopeInfo} - {Param}", scopeInfo, new { value.FileName });
+
+            value.FileName = HttpUtility.UrlDecode(value.FileName);
+            var client = await _fileStorage.GetBlobClientAsync(value.FileName);
+
+            await _fileStorage.ArchiveFileAsync(client);
+
+            return Ok();
+        }
     }
 }
