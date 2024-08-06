@@ -8,5 +8,5 @@
 |  Health Check               |  Entity Framework Core      |  Unit Tests              |  Code Coverage            |  *Azure Log Analytics        |  Azure Service Bus      |
 |  Automapper                 |  Equality Comparison        |                          |  *White Source            |  Azure API Management        |                         |
 |  MediatR                    |  Generic Repo               |                          |  *Sonar Cloud             |  Azure Feature Flag          |                         |
-|  *Fluent Validation         |                             |                          |  *Azure Key Vault         |                              |                         |
+|  *Fluent Validation         |                             |                          |  *Azure Key Vault         |  Azure Blob Storage          |                         |
 |                             |                             |                          |  Library                  |                              |                         |
