@@ -1,4 +1,5 @@
-﻿using Azure.Storage.Blobs;
+﻿using Azure;
+using Azure.Storage.Blobs;
 using InfoSafe.Infra.BlobStorage.Interfaces;
 using InfoSafe.ViewModel;
 using Microsoft.AspNetCore.Authorization;
@@ -131,7 +132,12 @@ namespace InfoSafe.API.Controllers
                 {
                     Content = $"data:{contentType};base64,{base64String}",
                     Name = client.Name,
-                    ContentType = contentType
+                    ContentType = contentType,
+                    MetaData = new BlobMetaDataVM
+                    {
+                        Title = content.Value.Details.Metadata["title"],
+                        Description = content.Value.Details.Metadata["description"]
+                    }
                 });
             }
 
@@ -213,11 +219,23 @@ namespace InfoSafe.API.Controllers
                 _logger.LogInformation("{ScopeInfo} - {Param}", scopeInfo, new { value.FileName });
 
             value.FileName = HttpUtility.UrlDecode(value.FileName);
+            BlobResponseVM response = new();
             var client = await _fileStorage.GetBlobClientAsync(value.FileName);
 
-            await _fileStorage.ArchiveFileAsync(client);
+            if (await client.ExistsAsync())
+            {
+                await _fileStorage.ArchiveFileAsync(client);
 
-            return Ok();
+                response.Error = false;
+                response.Status = $"File: {value.FileName} has been successfully archived.";
+            }
+            else
+            {
+                response.Error = true;
+                response.Status = $"File with name {value.FileName} not found.";
+            }
+
+            return Ok(response);
         }
     }
 }
