@@ -80,16 +80,56 @@ namespace InfoSafe.Infra.BlobStorage
 
         public async Task OverwriteFileAsync(BlobClient client, Stream fileStream, string contentType)
         {
-            var headers = new BlobHttpHeaders
+            try
             {
-                ContentType = contentType
-            };
-            await client.UploadAsync(fileStream, headers);
+                BlobProperties properties = await client.GetPropertiesAsync();
+                var etagCondition = new BlobRequestConditions()
+                {
+                    IfMatch = properties.ETag
+                };
+
+                var headers = new BlobHttpHeaders
+                {
+                    ContentType = contentType
+                };
+                await client.UploadAsync(fileStream, headers, conditions: etagCondition);
+            }
+            catch (RequestFailedException ex)
+            {
+                if (ex.ErrorCode == BlobErrorCode.ConditionNotMet)
+                {
+                    throw new ArgumentException("Concurrency Error");
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public async Task DeleteFileAsync(BlobClient client)
         {
-            await client.DeleteAsync();
+            try
+            {
+                BlobProperties properties = await client.GetPropertiesAsync();
+                var etagCondition = new BlobRequestConditions()
+                {
+                    IfMatch = properties.ETag
+                };
+
+                await client.DeleteAsync(conditions: etagCondition);
+            }
+            catch (RequestFailedException ex)
+            {
+                if (ex.ErrorCode == BlobErrorCode.ConditionNotMet)
+                {
+                    throw new ArgumentException("Concurrency Error");
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         // Metadata
